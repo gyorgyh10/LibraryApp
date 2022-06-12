@@ -1,9 +1,7 @@
 package hu.progmasters.library.controller;
 
 import hu.progmasters.library.domain.Genre;
-import hu.progmasters.library.dto.BookCreateCommand;
-import hu.progmasters.library.dto.BookInfo;
-import hu.progmasters.library.dto.ExemplarInfo;
+import hu.progmasters.library.dto.*;
 import hu.progmasters.library.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -52,10 +50,19 @@ public class BookController {
     }
 
     @GetMapping("/{bookId}/exemplars")
-    @Operation(summary = "List ALL EXEMPLARS of a book")
+    @Operation(summary = "List all EXEMPLARS of a book")
     @ApiResponse(responseCode = "200", description = "Exemplars have been listed.")
     public ResponseEntity<List<ExemplarInfo>> findAllExemplars(@PathVariable("bookId") Integer id) {
         List<ExemplarInfo> exemplars = bookService.findAllExemplars(id);
         return new ResponseEntity<>(exemplars, HttpStatus.OK);
+    }
+
+    @PutMapping("/{bookId}")
+    @Operation(summary = "Update a book")
+    @ApiResponse(responseCode = "200", description = "Book has been updated")
+    public ResponseEntity<BookInfo> update(@PathVariable("bookId") Integer id,
+                                           @Valid @RequestBody BookCreateCommand command) {
+        BookInfo updated = bookService.update(id, command);
+        return new ResponseEntity<>(updated, HttpStatus.CREATED);
     }
 }

@@ -61,4 +61,14 @@ public class ExemplarController {
         exemplarService.delete(exemplarId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PutMapping("/{exemplarId}")
+    @Operation(summary = "Update a exemplar")
+    @ApiResponse(responseCode = "200", description = "Exemplar has been updated")
+    public ResponseEntity<ExemplarInfo> update(@PathVariable("exemplarId") Integer id,
+                                           @Valid @RequestBody ExemplarCreateCommand command) {
+        ExemplarInfo updated = exemplarService.update(id, command);
+        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+    }
+
 }

@@ -5,10 +5,16 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: on
-#
+logging:
+  level:
+    org:
+      flywaydb: debug
+borrowing:
+  time: 20
+  prolongation: 10
 #    docker run --name librarydb -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=library -d -p 3388:3306 mysql:latest

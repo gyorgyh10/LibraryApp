@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public class BorrowingController {
     }
 
     @GetMapping()
-    @Operation(summary = "List all borrowings for an exemplar or for a user")
+    @Operation(summary = "List all borrowings OR all for an exemplar or for a user")
     @ApiResponse(responseCode = "200", description = "Borrowings have been listed.")
     public ResponseEntity<List<BorrowingInfo>> findAll(
             @RequestParam(value="exemplarId", required = false) Integer exemplarId,
@@ -61,12 +60,12 @@ public class BorrowingController {
         borrowingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-//    @PutMapping("/{borrowingId}")
-//    @Operation(summary = "Update a borrowing")
-//    @ApiResponse(responseCode = "200", description = "Borrowing has been updated")
-//    public ResponseEntity<BorrowingInfo> update(@PathVariable("borrowingId") Integer id,
-//                                           @Valid @RequestBody BorrowingCreateCommand command) {
-//        BorrowingInfo updated = borrowingService.update(id, command);
-//        return new ResponseEntity<>(updated, HttpStatus.CREATED);
-//    }
+
+    @PutMapping("/{borrowingId}")
+    @Operation(summary = "Extends a borrowing")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been extended.")
+    public ResponseEntity<BorrowingInfo> prolongation(@PathVariable("borrowingId") Integer id) {
+        BorrowingInfo updated = borrowingService.prolongation(id);
+        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+    }
 }

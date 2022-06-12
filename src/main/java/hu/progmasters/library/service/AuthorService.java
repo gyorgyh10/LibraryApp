@@ -36,11 +36,7 @@ public class AuthorService {
 
 
     public List<BookInfoNoAuthor> findAllBooksOfAuthor(Integer authorId) {
-        Optional<Author> authorOptional = authorRepository.findById(authorId);
-        if (authorOptional.isEmpty()) {
-            throw new AuthorNotFoundException(authorId);
-        }
-        Author author = authorOptional.get();
+        Author author = findAuthor(authorId);
         List<Book> books = author.getBooks();
         return books.stream()
                 .map(book -> modelMapper.map(book, BookInfoNoAuthor.class))
@@ -48,7 +44,7 @@ public class AuthorService {
     }
 
     public List<AuthorInfo> findAll() {
-        List<Author> authors=authorRepository.findAll();
+        List<Author> authors = authorRepository.findAll();
         return authors.stream()
                 .map(author -> modelMapper.map(author, AuthorInfo.class))
                 .collect(Collectors.toList());
@@ -56,5 +52,20 @@ public class AuthorService {
 
     public AuthorRepository getAuthorRepository() {
         return authorRepository;
+    }
+
+    public AuthorInfo update(Integer id, AuthorCreateCommand command) {
+        Author toUpdate = findAuthor(id);
+        modelMapper.map(command, toUpdate);
+        return modelMapper.map(toUpdate, AuthorInfo.class);
+    }
+
+
+    private Author findAuthor(Integer authorId) {
+        Optional<Author> authorOptional = authorRepository.findById(authorId);
+        if (authorOptional.isEmpty()) {
+            throw new AuthorNotFoundException(authorId);
+        }
+        return authorOptional.get();
     }
 }

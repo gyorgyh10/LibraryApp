@@ -1,12 +1,10 @@
 package hu.progmasters.library.service;
 
-import hu.progmasters.library.domain.Author;
-import hu.progmasters.library.domain.Book;
-import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.domain.Genre;
+import hu.progmasters.library.domain.*;
 import hu.progmasters.library.dto.BookCreateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.dto.ExemplarInfo;
+import hu.progmasters.library.dto.UserInfo;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
 import hu.progmasters.library.repository.BookRepository;
@@ -53,11 +51,8 @@ public class BookService {
     }
 
     public BookInfo findById(Integer bookId) {
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-        if (bookOptional.isEmpty()) {
-            throw new BookNotFoundException(bookId);
-        }
-        return modelMapper.map(bookOptional.get(), BookInfo.class);
+        Book bookFound = findBook(bookId);
+        return modelMapper.map(bookFound, BookInfo.class);
     }
 
 
@@ -74,5 +69,19 @@ public class BookService {
 
     public BookRepository getBookRepository() {
         return bookRepository;
+    }
+
+    public BookInfo update(Integer id, BookCreateCommand command) {
+        Book toUpdate = findBook(id);
+        modelMapper.map(command, toUpdate);
+        return modelMapper.map(toUpdate, BookInfo.class);
+    }
+
+    private Book findBook(Integer bookId) {
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+        if (bookOptional.isEmpty()) {
+            throw new BookNotFoundException(bookId);
+        }
+        return bookOptional.get();
     }
 }

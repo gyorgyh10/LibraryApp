@@ -4,10 +4,8 @@ package hu.progmasters.library.service;
 import hu.progmasters.library.domain.Book;
 import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.dto.ExemplarCreateCommand;
-import hu.progmasters.library.dto.ExemplarInfo;
-import hu.progmasters.library.dto.ExemplarInfoAll;
-import hu.progmasters.library.dto.ExemplarInfoNoBook;
+import hu.progmasters.library.domain.User;
+import hu.progmasters.library.dto.*;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
 import hu.progmasters.library.exceptionhandling.ExemplarIsInActiveBorrowingException;
 import hu.progmasters.library.exceptionhandling.ExemplarNotFoundException;
@@ -81,6 +79,14 @@ public class ExemplarService {
         Exemplar exemplarFound = findExemplar(id);
         return modelMapper.map(exemplarFound, ExemplarInfoAll.class);
     }
+
+
+    public ExemplarInfo update(Integer id, ExemplarCreateCommand command) {
+            Exemplar toUpdate = findExemplar(id);
+            modelMapper.map(command, toUpdate);
+            return modelMapper.map(toUpdate, ExemplarInfo.class);
+        }
+
 
     private Exemplar findExemplar(Integer id) {
         Optional<Exemplar> exemplarOptional=exemplarRepository.findById(id);

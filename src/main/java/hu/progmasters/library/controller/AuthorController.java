@@ -50,5 +50,13 @@ public class AuthorController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
+    @PutMapping("/{authorId}")
+    @Operation(summary = "Update an author")
+    @ApiResponse(responseCode = "200", description = "Author has been updated")
+    public ResponseEntity<AuthorInfo> update(@PathVariable("authorId") Integer id,
+                                           @Valid @RequestBody AuthorCreateCommand command) {
+        AuthorInfo updated = authorService.update(id, command);
+        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+    }
 
 }
