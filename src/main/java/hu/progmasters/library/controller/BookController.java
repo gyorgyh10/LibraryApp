@@ -63,6 +63,6 @@ public class BookController {
     public ResponseEntity<BookInfo> update(@PathVariable("bookId") Integer id,
                                            @Valid @RequestBody BookCreateCommand command) {
         BookInfo updated = bookService.update(id, command);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 }

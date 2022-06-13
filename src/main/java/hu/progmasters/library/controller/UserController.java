@@ -63,7 +63,7 @@ public class UserController {
     public ResponseEntity<UserInfo> update(@PathVariable("userId") Integer id,
                                            @Valid @RequestBody UserCreateCommand command) {
         UserInfo updated = userService.update(id, command);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
     @DeleteMapping("/{userId}")

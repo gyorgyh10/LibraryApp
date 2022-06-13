@@ -56,7 +56,7 @@ public class AuthorController {
     public ResponseEntity<AuthorInfo> update(@PathVariable("authorId") Integer id,
                                            @Valid @RequestBody AuthorCreateCommand command) {
         AuthorInfo updated = authorService.update(id, command);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
 }
