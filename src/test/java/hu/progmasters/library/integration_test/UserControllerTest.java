@@ -148,7 +148,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testDelete_TomJohnson_TomJohnsonMarkedDeleted() throws Exception {
+    void testDelete_TomJohnson_TomJohnsonDeleted() throws Exception {
         mockMvc.perform(post("/api/library/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstToSave)));

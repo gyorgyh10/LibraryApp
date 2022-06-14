@@ -1,6 +1,9 @@
 package hu.progmasters.library.controller;
 
-import hu.progmasters.library.dto.*;
+import hu.progmasters.library.dto.ExemplarCreateCommand;
+import hu.progmasters.library.dto.ExemplarInfo;
+import hu.progmasters.library.dto.ExemplarInfoAll;
+import hu.progmasters.library.dto.UserInfo;
 import hu.progmasters.library.service.ExemplarService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("api/library/exemplars")
@@ -38,13 +42,14 @@ public class ExemplarController {
         return new ResponseEntity<>(exemplar, HttpStatus.OK);
     }
 
-//    @GetMapping("/ofbook/{bookId}")
-//    @Operation(summary = "List all exemplars of the book.")
-//    @ApiResponse(responseCode = "200", description = "Exemplars have been listed.")
-//    public ResponseEntity<List<ExemplarInfoNoBook>> findAllExemplarsOfBook(@PathVariable("bookId") Integer bookId) {
-//        List<ExemplarInfoNoBook> exemplars = exemplarService.findAllExemplarsOfBook(bookId);
-//        return new ResponseEntity<>(exemplars, HttpStatus.OK);
-//    }
+    @GetMapping
+    @Operation(summary = "List all exemplars")
+    @ApiResponse(responseCode = "200", description = "Exemplars have been listed.")
+    public ResponseEntity<List<ExemplarInfo>> findAll() {
+        List<ExemplarInfo> exemplars = exemplarService.findAll();
+        return new ResponseEntity<>(exemplars, HttpStatus.OK);
+    }
+
 
 //    @GetMapping("/ofbook/{bookId}/borrowable")
 //    @Operation(summary = "List all borrowable exemplars of the book.")
@@ -66,9 +71,9 @@ public class ExemplarController {
     @Operation(summary = "Update a exemplar")
     @ApiResponse(responseCode = "200", description = "Exemplar has been updated")
     public ResponseEntity<ExemplarInfo> update(@PathVariable("exemplarId") Integer id,
-                                           @Valid @RequestBody ExemplarCreateCommand command) {
+                                               @Valid @RequestBody ExemplarCreateCommand command) {
         ExemplarInfo updated = exemplarService.update(id, command);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
 }

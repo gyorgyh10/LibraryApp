@@ -106,13 +106,13 @@ public class BorrowingService {
     }
 
     public BorrowingInfo prolongation(Integer id) {
-        Borrowing toProlongate = findBorrowing(id);
-        if (toProlongate.getFromDate().plusDays(borrowingTime+borrowingProlongation).isAfter(now())) {
-                toProlongate.setToDate(toProlongate.getToDate().plusDays(borrowingProlongation));
+        Borrowing forProlongation = findBorrowing(id);
+        if (forProlongation.getFromDate().plusDays(borrowingTime+borrowingProlongation).isAfter(now())) {
+                forProlongation.setToDate(forProlongation.getToDate().plusDays(borrowingProlongation));
         } else {
             throw new BorrowingTimeHasExpiredException(id);
         }
 
-        return modelMapper.map(toProlongate, BorrowingInfo.class);
+        return modelMapper.map(forProlongation, BorrowingInfo.class);
     }
 }

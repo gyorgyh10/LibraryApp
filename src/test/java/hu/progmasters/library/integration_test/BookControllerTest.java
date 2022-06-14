@@ -165,7 +165,7 @@ class BookControllerTest {
     }
 
 //    @Test
-//    void testDelete_TomsAdventure_TomsAdventureMarkedDeleted() throws Exception {
+//    void testDelete_TomsAdventure_TomsAdventureDeleted() throws Exception {
 //        mockMvc.perform(post("/api/library/authors")
 //                .contentType(MediaType.APPLICATION_JSON_VALUE)
 //                .content(objectMapper.writeValueAsString(firstAuthorToSave)));

@@ -46,13 +46,6 @@ public class ExemplarService {
         return modelMapper.map(toSave, ExemplarInfo.class);
     }
 
-    public List<ExemplarInfoNoBook> findAllExemplarsOfBook(Integer bookId) {
-        List<Exemplar> exemplars = exemplarRepository.findAllExemplarOfBook(bookId);
-        return exemplars.stream()
-                .map(exemplar -> modelMapper.map(exemplar,ExemplarInfoNoBook.class))
-                .collect(Collectors.toList());
-    }
-
     public List<ExemplarInfoNoBook> findAllBorrowableExemplarsOfBook(Integer bookId) {
         List<Exemplar> borrowableExemplars = exemplarRepository.findAllBorrowableExemplarOfBook(bookId);
         return borrowableExemplars.stream()
@@ -94,5 +87,12 @@ public class ExemplarService {
             throw new ExemplarNotFoundException(id);
         }
         return exemplarOptional.get();
+    }
+
+    public List<ExemplarInfo> findAll() {
+        List<Exemplar> exemplars = exemplarRepository.findAll();
+        return exemplars.stream()
+                .map(exemplar -> modelMapper.map(exemplar, ExemplarInfo.class))
+                .collect(Collectors.toList());
     }
 }

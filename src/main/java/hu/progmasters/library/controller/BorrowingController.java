@@ -66,6 +66,6 @@ public class BorrowingController {
     @ApiResponse(responseCode = "200", description = "Borrowing has been extended.")
     public ResponseEntity<BorrowingInfo> prolongation(@PathVariable("borrowingId") Integer id) {
         BorrowingInfo updated = borrowingService.prolongation(id);
-        return new ResponseEntity<>(updated, HttpStatus.CREATED);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 }
