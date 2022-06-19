@@ -40,7 +40,7 @@ public class BorrowingService {
     }
 
 
-    public BorrowingInfo create(BorrowingCreateCommand command, Integer exemplarId, Integer userId) {
+    public BorrowingInfo create(Integer exemplarId, Integer userId) {
         Optional<Exemplar> optionalExemplar = exemplarService.getExemplarRepository().findById(exemplarId);
         if (optionalExemplar.isEmpty()) {
             throw new ExemplarNotFoundException(exemplarId);
@@ -56,7 +56,8 @@ public class BorrowingService {
         }
         User userOfBorrowing = optionalUser.get();
         Borrowing toSave = new Borrowing();
-        modelMapper.map(command, toSave);
+        toSave.setFromDate(now());
+        toSave.setToDate(now().plusDays(borrowingTime));
         toSave.setExemplar(exemplarOfBorrowing);
         toSave.setUser(userOfBorrowing);
         toSave.setActive(true);
@@ -87,13 +88,6 @@ public class BorrowingService {
 
     }
 
-    private Borrowing findBorrowing(Integer id) {
-        Optional<Borrowing> optionalBorrowing = borrowingRepository.findById(id);
-        if (optionalBorrowing.isEmpty()) {
-            throw new BorrowingNotFoundException(id);
-        }
-        return optionalBorrowing.get();
-    }
 
     public BorrowingRepository getBorrowingRepository() {
         return borrowingRepository;
@@ -107,12 +101,29 @@ public class BorrowingService {
 
     public BorrowingInfo prolongation(Integer id) {
         Borrowing forProlongation = findBorrowing(id);
-        if (forProlongation.getFromDate().plusDays(borrowingTime+borrowingProlongation).isAfter(now())) {
-                forProlongation.setToDate(forProlongation.getToDate().plusDays(borrowingProlongation));
+        if (forProlongation.getFromDate().plusDays(borrowingTime + borrowingProlongation).isAfter(now())) {
+            forProlongation.setToDate(forProlongation.getToDate().plusDays(borrowingProlongation));
         } else {
             throw new BorrowingTimeHasExpiredException(id);
         }
 
         return modelMapper.map(forProlongation, BorrowingInfo.class);
     }
+
+    public BorrowingInfo inactivation(Integer id) {
+        Borrowing forInactivation = findBorrowing(id);
+        forInactivation.setToDate(now());
+        forInactivation.setActive(false);
+        forInactivation.getExemplar().setBorrowable(true);
+        return modelMapper.map(forInactivation, BorrowingInfo.class);
+    }
+
+    private Borrowing findBorrowing(Integer id) {
+        Optional<Borrowing> optionalBorrowing = borrowingRepository.findById(id);
+        if (optionalBorrowing.isEmpty()) {
+            throw new BorrowingNotFoundException(id);
+        }
+        return optionalBorrowing.get();
+    }
+
 }

@@ -6,13 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthorCreateCommand {
+public class AuthorCreateUpdateCommand {
     @NotBlank(message = "Most not be blank")
     @Schema(description = "Author of the book", example="Emma Writer")
     private String name;

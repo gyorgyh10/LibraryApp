@@ -16,7 +16,7 @@ CREATE TABLE book
     book_title           varchar(255),
     author_id            integer,
     book_deleted         bit,
-    CONSTRAINT fk_book_author FOREIGN KEY (author_id) references author (author_id)
+    CONSTRAINT fk_book_author FOREIGN KEY (author_id) REFERENCES author (author_id)
 );
 
 CREATE TABLE exemplar
@@ -27,7 +27,7 @@ CREATE TABLE exemplar
     exemplar_inventory_number integer,
     of_book_id                integer,
     exemplar_deleted          bit,
-    constraint fk_exemplar_book foreign key (of_book_id) references book (book_id)
+    CONSTRAINT fk_exemplar_book FOREIGN KEY (of_book_id) REFERENCES book (book_id)
 );
 
 CREATE TABLE user
@@ -42,12 +42,12 @@ CREATE TABLE user
 
 CREATE TABLE borrowing
 (
-    borowing_id        integer AUTO_INCREMENT PRIMARY KEY,
-    borowing_active    bit,
-    borowing_from_date date,
-    borowing_to_date   date,
+    borrowing_id        integer AUTO_INCREMENT PRIMARY KEY,
+    borrowing_active    bit,
+    borrowing_from_date date,
+    borrowing_to_date   date,
     exemplar_id        integer,
     user_id            integer,
-    constraint fk_borrowing_user foreign key (user_id) references user (user_id),
-    constraint fk_borrowing_exemplar foreign key (exemplar_id) references exemplar (exemplar_id)
+    CONSTRAINT fk_borrowing_user FOREIGN KEY (user_id) REFERENCES user (user_id),
+    CONSTRAINT fk_borrowing_exemplar FOREIGN KEY (exemplar_id) REFERENCES exemplar (exemplar_id)
 );

@@ -49,7 +49,7 @@ class ExemplarControllerTest {
     private ExemplarCreateCommand firstToUpdate;
     private ExemplarInfo firstUpdated;
     private BookCreateCommand firstBookToSave;
-    private AuthorCreateCommand firstAuthorToSave;
+    private AuthorCreateUpdateCommand firstAuthorToSave;
 
     @BeforeEach
     void init() {
@@ -197,7 +197,7 @@ class ExemplarControllerTest {
     }
 
     private void initFirstBook() {
-        firstAuthorToSave = new AuthorCreateCommand();
+        firstAuthorToSave = new AuthorCreateUpdateCommand();
         firstAuthorToSave.setName("Emma Writer");
         firstBookToSave = new BookCreateCommand();
         firstBookToSave.setTitle("Tom's Adventure");

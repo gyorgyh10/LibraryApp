@@ -1,6 +1,7 @@
 package hu.progmasters.library.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +18,7 @@ public class Borrowing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "borowing_id")
+    @Column(name = "borrowing_id")
     private Integer id;
 
     @ManyToOne
@@ -28,12 +29,14 @@ public class Borrowing {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "borowing_from_date")
+    @Column(name = "borrowing_from_date")
+ //   @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate fromDate;
 
-    @Column(name = "borowing_to_date")
+    @Column(name = "borrowing_to_date")
+ //   @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate toDate;
 
-    @Column(name = "borowing_active")
+    @Column(name = "borrowing_active")
     private Boolean active;
 }

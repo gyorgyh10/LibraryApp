@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import hu.progmasters.library.domain.Book;
 import hu.progmasters.library.domain.Genre;
-import hu.progmasters.library.dto.AuthorCreateCommand;
+import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookCreateCommand;
 import hu.progmasters.library.dto.BookInfo;
@@ -50,7 +50,7 @@ class BookControllerTest {
     private BookInfo secondSaved;
     private BookCreateCommand firstToUpdate;
     private BookInfo firstUpdated;
-    private AuthorCreateCommand firstAuthorToSave;
+    private AuthorCreateUpdateCommand firstAuthorToSave;
 
     @BeforeEach
     void init() {
@@ -181,7 +181,7 @@ class BookControllerTest {
 //    }
 
     private void initFirstAuthor() {
-        firstAuthorToSave = new AuthorCreateCommand();
+        firstAuthorToSave = new AuthorCreateUpdateCommand();
         firstAuthorToSave.setName("Emma Writer");
     }
 

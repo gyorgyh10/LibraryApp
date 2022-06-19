@@ -1,6 +1,5 @@
 package hu.progmasters.library.controller;
 
-import hu.progmasters.library.dto.BorrowingCreateCommand;
 import hu.progmasters.library.dto.BorrowingInfo;
 import hu.progmasters.library.service.BorrowingService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -18,7 +16,7 @@ import java.util.List;
 @Slf4j
 public class BorrowingController {
 
-      private final BorrowingService borrowingService;
+    private final BorrowingService borrowingService;
 
     public BorrowingController(BorrowingService borrowingService) {
         this.borrowingService = borrowingService;
@@ -28,10 +26,9 @@ public class BorrowingController {
     @PostMapping("/{exemplarId}/{userId}")
     @Operation(summary = "Save a borrowing")
     @ApiResponse(responseCode = "201", description = "Borrowing has been saved")
-    public ResponseEntity<BorrowingInfo> create(@Valid @RequestBody BorrowingCreateCommand command,
-                                                @PathVariable("exemplarId") Integer exemplarId,
+    public ResponseEntity<BorrowingInfo> create(@PathVariable("exemplarId") Integer exemplarId,
                                                 @PathVariable("userId") Integer userId) {
-        BorrowingInfo saved = borrowingService.create(command, exemplarId, userId);
+        BorrowingInfo saved = borrowingService.create(exemplarId, userId);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -39,8 +36,8 @@ public class BorrowingController {
     @Operation(summary = "List all borrowings OR all for an exemplar or for a user")
     @ApiResponse(responseCode = "200", description = "Borrowings have been listed.")
     public ResponseEntity<List<BorrowingInfo>> findAll(
-            @RequestParam(value="exemplarId", required = false) Integer exemplarId,
-            @RequestParam(value="userId", required = false) Integer userId) {
+            @RequestParam(value = "exemplarId", required = false) Integer exemplarId,
+            @RequestParam(value = "userId", required = false) Integer userId) {
         List<BorrowingInfo> borrowings = borrowingService.findAll(exemplarId, userId);
         return new ResponseEntity<>(borrowings, HttpStatus.OK);
     }
@@ -56,16 +53,24 @@ public class BorrowingController {
     @DeleteMapping("/{/borrowingId}")
     @Operation(summary = "Deletes a borrowing")
     @ApiResponse(responseCode = "200", description = "Borrowing has been deleted.")
-    public ResponseEntity<Void> delete(@PathVariable("borrowingId")Integer id) {
+    public ResponseEntity<Void> delete(@PathVariable("borrowingId") Integer id) {
         borrowingService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PutMapping("/{borrowingId}")
+    @PutMapping("/extend/{borrowingId}")
     @Operation(summary = "Extends a borrowing")
     @ApiResponse(responseCode = "200", description = "Borrowing has been extended.")
     public ResponseEntity<BorrowingInfo> prolongation(@PathVariable("borrowingId") Integer id) {
-        BorrowingInfo updated = borrowingService.prolongation(id);
-        return new ResponseEntity<>(updated, HttpStatus.OK);
+        BorrowingInfo extended = borrowingService.prolongation(id);
+        return new ResponseEntity<>(extended, HttpStatus.OK);
+    }
+
+    @PutMapping("/bring_back/{borrowingId}")
+    @Operation(summary = "Inactivate a borrowing. (Book is back.)")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been inactivated.")
+    public ResponseEntity<BorrowingInfo> inactivation(@PathVariable("borrowingId") Integer id) {
+        BorrowingInfo inactivated = borrowingService.inactivation(id);
+        return new ResponseEntity<>(inactivated, HttpStatus.OK);
     }
 }

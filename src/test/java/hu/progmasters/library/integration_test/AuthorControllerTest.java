@@ -3,7 +3,7 @@ package hu.progmasters.library.integration_test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import hu.progmasters.library.domain.Author;
-import hu.progmasters.library.dto.AuthorCreateCommand;
+import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,13 +41,13 @@ class AuthorControllerTest {
 
     private final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
 
-    private AuthorCreateCommand firstToSave;
+    private AuthorCreateUpdateCommand firstToSave;
     private AuthorInfo firstSaved;
-    private AuthorCreateCommand secondToSave;
+    private AuthorCreateUpdateCommand secondToSave;
     private AuthorInfo secondSaved;
-    private AuthorCreateCommand thirdToSave;
+    private AuthorCreateUpdateCommand thirdToSave;
     private AuthorInfo thirdSaved;
-    private AuthorCreateCommand firstToUpdate;
+    private AuthorCreateUpdateCommand firstToUpdate;
     private AuthorInfo firstUpdated;
 
     @BeforeEach
@@ -84,12 +84,12 @@ class AuthorControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(firstSaved)));
 
-
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(secondToSave)))
                 .andExpect(status().isCreated())
                 .andExpect(content().json(objectMapper.writeValueAsString(secondSaved)));
+
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(thirdToSave)))
@@ -148,7 +148,7 @@ class AuthorControllerTest {
     }
 
     private void initFirst() {
-        firstToSave = new AuthorCreateCommand();
+        firstToSave = new AuthorCreateUpdateCommand();
         firstToSave.setName("Tom Writer");
         firstSaved = new AuthorInfo();
         firstSaved.setId(1);
@@ -156,7 +156,7 @@ class AuthorControllerTest {
     }
 
     private void initSecond() {
-        secondToSave = new AuthorCreateCommand();
+        secondToSave = new AuthorCreateUpdateCommand();
         secondToSave.setName("John Writer");
         secondSaved = new AuthorInfo();
         secondSaved.setId(2);
@@ -164,7 +164,7 @@ class AuthorControllerTest {
     }
 
     private void initThird() {
-        thirdToSave = new AuthorCreateCommand();
+        thirdToSave = new AuthorCreateUpdateCommand();
         thirdToSave.setName("Emma Writer");
         thirdSaved = new AuthorInfo();
         thirdSaved.setId(3);
@@ -172,7 +172,7 @@ class AuthorControllerTest {
     }
 
     private void initToUpdate() {
-        firstToUpdate = new AuthorCreateCommand();
+        firstToUpdate = new AuthorCreateUpdateCommand();
         firstToUpdate.setName("Updated Writer");
         firstUpdated = new AuthorInfo();
         firstUpdated.setId(1);

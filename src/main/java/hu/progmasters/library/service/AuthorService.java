@@ -2,7 +2,7 @@ package hu.progmasters.library.service;
 
 import hu.progmasters.library.domain.Author;
 import hu.progmasters.library.domain.Book;
-import hu.progmasters.library.dto.AuthorCreateCommand;
+import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
@@ -27,7 +27,7 @@ public class AuthorService {
         this.modelMapper = modelMapper;
     }
 
-    public AuthorInfo createAuthor(AuthorCreateCommand command) {
+    public AuthorInfo createAuthor(AuthorCreateUpdateCommand command) {
         Author toSave = modelMapper.map(command, Author.class);
         toSave.setDeleted(false);
         Author saved = authorRepository.create(toSave);
@@ -54,7 +54,7 @@ public class AuthorService {
         return authorRepository;
     }
 
-    public AuthorInfo update(Integer id, AuthorCreateCommand command) {
+    public AuthorInfo update(Integer id, AuthorCreateUpdateCommand command) {
         Author toUpdate = findAuthor(id);
         modelMapper.map(command, toUpdate);
         return modelMapper.map(toUpdate, AuthorInfo.class);

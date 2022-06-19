@@ -14,4 +14,5 @@ public class ExemplarInfo {
     private Integer inventoryNumber;
     private Condition condition;
     private Boolean borrowable;
+    private BookInfoMin ofBook;
 }

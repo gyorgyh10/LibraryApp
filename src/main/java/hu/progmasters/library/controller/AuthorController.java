@@ -2,7 +2,6 @@ package hu.progmasters.library.controller;
 
 import hu.progmasters.library.dto.*;
 import hu.progmasters.library.service.AuthorService;
-import hu.progmasters.library.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class AuthorController {
     @PostMapping
     @Operation(summary = "Save an author")
     @ApiResponse(responseCode = "201", description = "Author has been saved")
-    public ResponseEntity<AuthorInfo> create(@Valid @RequestBody AuthorCreateCommand command) {
+    public ResponseEntity<AuthorInfo> create(@Valid @RequestBody AuthorCreateUpdateCommand command) {
         AuthorInfo saved = authorService.createAuthor(command);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -54,7 +53,7 @@ public class AuthorController {
     @Operation(summary = "Update an author")
     @ApiResponse(responseCode = "200", description = "Author has been updated")
     public ResponseEntity<AuthorInfo> update(@PathVariable("authorId") Integer id,
-                                           @Valid @RequestBody AuthorCreateCommand command) {
+                                           @Valid @RequestBody AuthorCreateUpdateCommand command) {
         AuthorInfo updated = authorService.update(id, command);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
