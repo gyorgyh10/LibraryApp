@@ -33,11 +33,11 @@ public class BookService {
 
     public BookInfo createBook(BookCreateCommand command) {
         Book toSave = modelMapper.map(command, Book.class);
-        Optional<Author> authorOptional = authorService.getAuthorRepository().findById(command.getAuthorId());
-        if (authorOptional.isEmpty()) {
-            throw new AuthorNotFoundException(command.getAuthorId());
-        }
-        toSave.setAuthor(authorOptional.get());
+        Author author = authorService.findAuthor(command.getAuthorId());
+//        if (authorOptional.isEmpty()) {
+//            throw new AuthorNotFoundException(command.getAuthorId());
+//        }
+        toSave.setAuthor(author);
         toSave.setDeleted(false);
         Book saved = bookRepository.save(toSave);
         return modelMapper.map(saved, BookInfo.class);
@@ -77,7 +77,7 @@ public class BookService {
         return modelMapper.map(toUpdate, BookInfo.class);
     }
 
-    private Book findBook(Integer bookId) {
+    public Book findBook(Integer bookId) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
         if (bookOptional.isEmpty()) {
             throw new BookNotFoundException(bookId);

@@ -220,6 +220,7 @@ class ExemplarControllerTest {
         firstSaved.setInventoryNumber(123);
         firstSaved.setCondition(Condition.GOOD);
         firstSaved.setBorrowable(true);
+        firstSaved.setOfBook(new BookInfoMin(1, "Tom's Adventure"));
     }
 
     private void initSecond() {
@@ -232,6 +233,7 @@ class ExemplarControllerTest {
         secondSaved.setInventoryNumber(212);
         secondSaved.setCondition(Condition.NEW);
         secondSaved.setBorrowable(false);
+        secondSaved.setOfBook(new BookInfoMin(1, "Tom's Adventure"));
     }
 
     private void initToUpdate() {
@@ -244,5 +246,6 @@ class ExemplarControllerTest {
         firstUpdated.setInventoryNumber(333);
         firstUpdated.setCondition(Condition.USED);
         firstUpdated.setBorrowable(true);
+        firstUpdated.setOfBook(new BookInfoMin(1, "Tom's Adventure"));
     }
 }

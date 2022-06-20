@@ -5,13 +5,16 @@ import hu.progmasters.library.domain.Exemplar;
 import hu.progmasters.library.domain.User;
 import hu.progmasters.library.dto.BorrowingCreateCommand;
 import hu.progmasters.library.dto.BorrowingInfo;
-import hu.progmasters.library.exceptionhandling.*;
+import hu.progmasters.library.exceptionhandling.BorrowingNotFoundException;
+import hu.progmasters.library.exceptionhandling.BorrowingTimeHasExpiredException;
+import hu.progmasters.library.exceptionhandling.ExemplarNotBorrowableException;
 import hu.progmasters.library.repository.BorrowingRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,10 +29,8 @@ public class BorrowingService {
     private final ExemplarService exemplarService;
     private final UserService userService;
     private final ModelMapper modelMapper;
-    @Value("${borrowing.time}")
     private long borrowingTime;
-    @Value("${borrowing.prolongation}")
-    private long borrowingProlongation;
+    private long prolongation;
 
     public BorrowingService(BorrowingRepository borrowingRepository, ExemplarService exemplarService,
                             UserService userService, ModelMapper modelMapper) {
@@ -41,23 +42,18 @@ public class BorrowingService {
 
 
     public BorrowingInfo create(Integer exemplarId, Integer userId) {
-        Optional<Exemplar> optionalExemplar = exemplarService.getExemplarRepository().findById(exemplarId);
-        if (optionalExemplar.isEmpty()) {
-            throw new ExemplarNotFoundException(exemplarId);
-        }
-        Exemplar exemplarOfBorrowing = optionalExemplar.get();
+        Exemplar exemplarOfBorrowing = exemplarService.findExemplar(exemplarId);
         if (!exemplarOfBorrowing.getBorrowable()) {
             throw new ExemplarNotBorrowableException(exemplarId);
         }
+        User userOfBorrowing = userService.findUser(userId);
         exemplarOfBorrowing.setBorrowable(false);
-        Optional<User> optionalUser = userService.getUserRepository().findById(userId);
-        if (optionalUser.isEmpty()) {
-            throw new UserNotFoundException(userId);
-        }
-        User userOfBorrowing = optionalUser.get();
         Borrowing toSave = new Borrowing();
-        toSave.setFromDate(now());
-        toSave.setToDate(now().plusDays(borrowingTime));
+        LocalDate now = now();
+        toSave.setFromDate(now);
+        System.out.println(borrowingTime);
+        LocalDate toDate = now.plusDays(borrowingTime);
+        toSave.setToDate(toDate);
         toSave.setExemplar(exemplarOfBorrowing);
         toSave.setUser(userOfBorrowing);
         toSave.setActive(true);
@@ -88,11 +84,6 @@ public class BorrowingService {
 
     }
 
-
-    public BorrowingRepository getBorrowingRepository() {
-        return borrowingRepository;
-    }
-
     public BorrowingInfo update(Integer id, BorrowingCreateCommand command) {
         Borrowing toUpdate = findBorrowing(id);
         modelMapper.map(command, toUpdate);
@@ -101,12 +92,11 @@ public class BorrowingService {
 
     public BorrowingInfo prolongation(Integer id) {
         Borrowing forProlongation = findBorrowing(id);
-        if (forProlongation.getFromDate().plusDays(borrowingTime + borrowingProlongation).isAfter(now())) {
-            forProlongation.setToDate(forProlongation.getToDate().plusDays(borrowingProlongation));
+        if (forProlongation.getFromDate().plusDays(borrowingTime + prolongation).isAfter(now())) {
+            forProlongation.setToDate(forProlongation.getToDate().plusDays(prolongation));
         } else {
             throw new BorrowingTimeHasExpiredException(id);
         }
-
         return modelMapper.map(forProlongation, BorrowingInfo.class);
     }
 
@@ -126,4 +116,13 @@ public class BorrowingService {
         return optionalBorrowing.get();
     }
 
+    @Value("${borrowing.time}")
+    public void setBorrowingTime(long borrowingTime) {
+        this.borrowingTime = borrowingTime;
+    }
+
+    @Value("${borrowing.prolongation}")
+    public void setProlongation(long prolongation) {
+        this.prolongation = prolongation;
+    }
 }

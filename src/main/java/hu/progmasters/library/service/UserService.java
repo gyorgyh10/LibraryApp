@@ -32,7 +32,7 @@ public class UserService {
         User toSave = modelMapper.map(command, User.class);
         toSave.setDeleted(false);
         User saved = userRepository.create(toSave);
-        return modelMapper.map(toSave, UserInfo.class);
+        return modelMapper.map(saved, UserInfo.class);
     }
 
     public List<UserInfo> findAll() {
@@ -78,7 +78,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    private User findUser(Integer id) {
+    public User findUser(Integer id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty() || userOptional.get().getDeleted()) {
             throw new UserNotFoundException(id);
@@ -86,7 +86,4 @@ public class UserService {
         return userOptional.get();
     }
 
-    public UserRepository getUserRepository() {
-        return userRepository;
-    }
-}
+   }

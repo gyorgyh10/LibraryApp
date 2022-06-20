@@ -61,7 +61,7 @@ public class AuthorService {
     }
 
 
-    private Author findAuthor(Integer authorId) {
+    public Author findAuthor(Integer authorId) {
         Optional<Author> authorOptional = authorRepository.findById(authorId);
         if (authorOptional.isEmpty()) {
             throw new AuthorNotFoundException(authorId);

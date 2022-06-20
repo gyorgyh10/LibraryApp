@@ -164,21 +164,6 @@ class BookControllerTest {
                         firstSaved.getPublisher(), firstSaved.getISBN()));
     }
 
-//    @Test
-//    void testDelete_TomsAdventure_TomsAdventureDeleted() throws Exception {
-//        mockMvc.perform(post("/api/library/authors")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
-//        mockMvc.perform(post("/api/library/books")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstToSave)));
-//        mockMvc.perform(delete("/api/library/books/1"))
-//                .andExpect(status().isOk());
-//
-//        assertThat(repository.findAll(Genre.CHILDREN)).isEmpty();
-//        mockMvc.perform(delete("/api/library/books/1"))
-//                .andExpect(status().isNotFound());
-//    }
 
     private void initFirstAuthor() {
         firstAuthorToSave = new AuthorCreateUpdateCommand();

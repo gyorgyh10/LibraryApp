@@ -4,9 +4,10 @@ package hu.progmasters.library.service;
 import hu.progmasters.library.domain.Book;
 import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.domain.User;
-import hu.progmasters.library.dto.*;
-import hu.progmasters.library.exceptionhandling.BookNotFoundException;
+import hu.progmasters.library.dto.ExemplarCreateCommand;
+import hu.progmasters.library.dto.ExemplarInfo;
+import hu.progmasters.library.dto.ExemplarInfoAll;
+import hu.progmasters.library.dto.ExemplarInfoNoBook;
 import hu.progmasters.library.exceptionhandling.ExemplarIsInActiveBorrowingException;
 import hu.progmasters.library.exceptionhandling.ExemplarNotFoundException;
 import hu.progmasters.library.repository.ExemplarRepository;
@@ -36,25 +37,18 @@ public class ExemplarService {
 
     public ExemplarInfo createExemplar(ExemplarCreateCommand command, Integer bookId) {
         Exemplar toSave = modelMapper.map(command, Exemplar.class);
-        Optional<Book> bookOptional = bookService.getBookRepository().findById(bookId);
-        if (bookOptional.isEmpty()) {
-            throw new BookNotFoundException(bookId);
-        }
-        toSave.setOfBook(bookOptional.get());
+        Book book = bookService.findBook(bookId);
+        toSave.setOfBook(book);
         toSave.setDeleted(false);
         Exemplar saved = exemplarRepository.create(toSave);
-        return modelMapper.map(toSave, ExemplarInfo.class);
+        return modelMapper.map(saved, ExemplarInfo.class);
     }
 
     public List<ExemplarInfoNoBook> findAllBorrowableExemplarsOfBook(Integer bookId) {
         List<Exemplar> borrowableExemplars = exemplarRepository.findAllBorrowableExemplarOfBook(bookId);
         return borrowableExemplars.stream()
-                .map(exemplar -> modelMapper.map(exemplar,ExemplarInfoNoBook.class))
+                .map(exemplar -> modelMapper.map(exemplar, ExemplarInfoNoBook.class))
                 .collect(Collectors.toList());
-    }
-
-    public ExemplarRepository getExemplarRepository() {
-        return exemplarRepository;
     }
 
     public void delete(Integer exemplarId) {
@@ -75,14 +69,14 @@ public class ExemplarService {
 
 
     public ExemplarInfo update(Integer id, ExemplarCreateCommand command) {
-            Exemplar toUpdate = findExemplar(id);
-            modelMapper.map(command, toUpdate);
-            return modelMapper.map(toUpdate, ExemplarInfo.class);
-        }
+        Exemplar toUpdate = findExemplar(id);
+        modelMapper.map(command, toUpdate);
+        return modelMapper.map(toUpdate, ExemplarInfo.class);
+    }
 
 
-    private Exemplar findExemplar(Integer id) {
-        Optional<Exemplar> exemplarOptional=exemplarRepository.findById(id);
+    public Exemplar findExemplar(Integer id) {
+        Optional<Exemplar> exemplarOptional = exemplarRepository.findById(id);
         if (exemplarOptional.isEmpty() || exemplarOptional.get().getDeleted()) {
             throw new ExemplarNotFoundException(id);
         }
