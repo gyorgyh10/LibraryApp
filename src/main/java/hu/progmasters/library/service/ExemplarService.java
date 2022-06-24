@@ -2,9 +2,8 @@ package hu.progmasters.library.service;
 
 
 import hu.progmasters.library.domain.Book;
-import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.dto.ExemplarCreateCommand;
+import hu.progmasters.library.dto.ExemplarCreateUpdateCommand;
 import hu.progmasters.library.dto.ExemplarInfo;
 import hu.progmasters.library.dto.ExemplarInfoAll;
 import hu.progmasters.library.dto.ExemplarInfoNoBook;
@@ -24,8 +23,6 @@ import java.util.stream.Collectors;
 public class ExemplarService {
 
     private final ExemplarRepository exemplarRepository;
-
-
     private final BookService bookService;
     private final ModelMapper modelMapper;
 
@@ -35,13 +32,25 @@ public class ExemplarService {
         this.modelMapper = modelMapper;
     }
 
-    public ExemplarInfo createExemplar(ExemplarCreateCommand command, Integer bookId) {
+    public ExemplarInfo create(ExemplarCreateUpdateCommand command, Integer bookId) {
         Exemplar toSave = modelMapper.map(command, Exemplar.class);
         Book book = bookService.findBook(bookId);
         toSave.setOfBook(book);
         toSave.setDeleted(false);
         Exemplar saved = exemplarRepository.create(toSave);
         return modelMapper.map(saved, ExemplarInfo.class);
+    }
+
+    public List<ExemplarInfo> findAll() {
+        List<Exemplar> exemplars = exemplarRepository.findAll();
+        return exemplars.stream()
+                .map(exemplar -> modelMapper.map(exemplar, ExemplarInfo.class))
+                .collect(Collectors.toList());
+    }
+
+    public ExemplarInfoAll findById(Integer id) {
+        Exemplar exemplarFound = findExemplar(id);
+        return modelMapper.map(exemplarFound, ExemplarInfoAll.class);
     }
 
     public List<ExemplarInfoNoBook> findAllBorrowableExemplarsOfBook(Integer bookId) {
@@ -53,27 +62,17 @@ public class ExemplarService {
 
     public void delete(Integer exemplarId) {
         Exemplar toDelete = findExemplar(exemplarId);
-        Optional<Borrowing> activeBorrowing = toDelete.getBorrowings().stream()
-                .filter(Borrowing::getActive)
-                .findFirst();
-        if (activeBorrowing.isPresent()) {
+        if (!toDelete.getBorrowable()) {
             throw new ExemplarIsInActiveBorrowingException(exemplarId);
         }
         toDelete.setDeleted(true);
     }
 
-    public ExemplarInfoAll findById(Integer id) {
-        Exemplar exemplarFound = findExemplar(id);
-        return modelMapper.map(exemplarFound, ExemplarInfoAll.class);
-    }
-
-
-    public ExemplarInfo update(Integer id, ExemplarCreateCommand command) {
+    public ExemplarInfo update(Integer id, ExemplarCreateUpdateCommand command) {
         Exemplar toUpdate = findExemplar(id);
         modelMapper.map(command, toUpdate);
         return modelMapper.map(toUpdate, ExemplarInfo.class);
     }
-
 
     public Exemplar findExemplar(Integer id) {
         Optional<Exemplar> exemplarOptional = exemplarRepository.findById(id);
@@ -83,10 +82,4 @@ public class ExemplarService {
         return exemplarOptional.get();
     }
 
-    public List<ExemplarInfo> findAll() {
-        List<Exemplar> exemplars = exemplarRepository.findAll();
-        return exemplars.stream()
-                .map(exemplar -> modelMapper.map(exemplar, ExemplarInfo.class))
-                .collect(Collectors.toList());
-    }
 }

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/library/authors")
+@RequestMapping("/api/library/authors")
 @Slf4j
 public class AuthorController {
 
@@ -28,7 +28,8 @@ public class AuthorController {
     @Operation(summary = "Save an author")
     @ApiResponse(responseCode = "201", description = "Author has been saved")
     public ResponseEntity<AuthorInfo> create(@Valid @RequestBody AuthorCreateUpdateCommand command) {
-        AuthorInfo saved = authorService.createAuthor(command);
+        log.info("Http request, POST /api/library/authors, body: " + command.toString());
+        AuthorInfo saved = authorService.create(command);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
 
@@ -37,15 +38,17 @@ public class AuthorController {
     @Operation(summary = "List all authors.")
     @ApiResponse(responseCode = "200", description = "Authors have been listed.")
     public ResponseEntity<List<AuthorInfo>> findAll() {
+        log.info("Http request, GET /api/library/authors");
         List<AuthorInfo> authors = authorService.findAll();
         return new ResponseEntity<>(authors, HttpStatus.OK);
     }
 
-    @GetMapping("{authorId}")
+    @GetMapping("/{authorId}")
     @Operation(summary = "List all books of the author.")
     @ApiResponse(responseCode = "200", description = "Books of the author have been listed.")
-    public ResponseEntity<List<BookInfoNoAuthor>> findAllBooksOfAuthor(@PathVariable("authorId") Integer authorId) {
-        List<BookInfoNoAuthor> books = authorService.findAllBooksOfAuthor(authorId);
+    public ResponseEntity<List<BookInfoNoAuthor>> findAllBooksOfAuthor(@PathVariable("authorId") Integer id) {
+        log.info("Http request, GET /api/library/authors/{authorId} with variable: " + id);
+        List<BookInfoNoAuthor> books = authorService.findAllBooksOfAuthor(id);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
@@ -54,6 +57,8 @@ public class AuthorController {
     @ApiResponse(responseCode = "200", description = "Author has been updated")
     public ResponseEntity<AuthorInfo> update(@PathVariable("authorId") Integer id,
                                            @Valid @RequestBody AuthorCreateUpdateCommand command) {
+        log.info("Http request, PUT /api/library/authors/{authorId} body: " + command.toString() +
+                " with variable: " + id);
         AuthorInfo updated = authorService.update(id, command);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }

@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExemplarCreateCommand {
+public class ExemplarCreateUpdateCommand {
 
     @NotNull(message = "Most not be Null")
     @Schema(description = "The inventory number of the exemplar", example="3241")

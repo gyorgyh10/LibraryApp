@@ -1,11 +1,9 @@
 package hu.progmasters.library.service;
 
 import hu.progmasters.library.domain.*;
-import hu.progmasters.library.dto.BookCreateCommand;
+import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.dto.ExemplarInfo;
-import hu.progmasters.library.dto.UserInfo;
-import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
 import hu.progmasters.library.repository.BookRepository;
 import org.modelmapper.ModelMapper;
@@ -31,19 +29,16 @@ public class BookService {
     }
 
 
-    public BookInfo createBook(BookCreateCommand command) {
+    public BookInfo create(BookCreateUpdateCommand command) {
         Book toSave = modelMapper.map(command, Book.class);
         Author author = authorService.findAuthor(command.getAuthorId());
-//        if (authorOptional.isEmpty()) {
-//            throw new AuthorNotFoundException(command.getAuthorId());
-//        }
         toSave.setAuthor(author);
         toSave.setDeleted(false);
         Book saved = bookRepository.save(toSave);
         return modelMapper.map(saved, BookInfo.class);
     }
 
-    public List<BookInfo> findAllBooks(Genre genre) {
+    public List<BookInfo> findAll(Genre genre) {
         List<Book> books = bookRepository.findAll(genre);
         return books.stream()
                 .map(book -> modelMapper.map(book, BookInfo.class))
@@ -56,22 +51,15 @@ public class BookService {
     }
 
 
-    public List<ExemplarInfo> findAllExemplars(Integer bookId) {
-        Optional<Book> bookOptional = bookRepository.findById(bookId);
-        if (bookOptional.isEmpty()) {
-            throw new BookNotFoundException(bookId);
-        }
-        List<Exemplar> exemplars = bookOptional.get().getExemplars();
+    public List<ExemplarInfo> findAllExemplarsOfBook(Integer bookId) {
+        Book ofBook = findBook(bookId);
+        List<Exemplar> exemplars = ofBook.getExemplars();
         return exemplars.stream()
                 .map(exemplar -> modelMapper.map(exemplar, ExemplarInfo.class))
                 .collect(Collectors.toList());
     }
 
-    public BookRepository getBookRepository() {
-        return bookRepository;
-    }
-
-    public BookInfo update(Integer id, BookCreateCommand command) {
+    public BookInfo update(Integer id, BookCreateUpdateCommand command) {
         Book toUpdate = findBook(id);
         modelMapper.map(command, toUpdate);
         return modelMapper.map(toUpdate, BookInfo.class);

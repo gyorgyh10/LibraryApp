@@ -4,7 +4,9 @@ import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.User;
 import hu.progmasters.library.dto.UserCreateCommand;
 import hu.progmasters.library.dto.UserInfo;
+import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
 import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
+import hu.progmasters.library.exceptionhandling.UserNotFoundException;
 import hu.progmasters.library.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +33,6 @@ class UserServiceTest {
 
     @InjectMocks
     UserService userService;
-    private Borrowing firstBorrowing;
     private User firstUser;
     private UserInfo firstUserInfo;
     private User secondUser;
@@ -41,7 +42,7 @@ class UserServiceTest {
     @BeforeEach
     void init() {
         userService = new UserService(userRepository, new ModelMapper());
-        firstBorrowing = new Borrowing(1, null, null, null, null, true);
+        Borrowing firstBorrowing = new Borrowing(1, null, null, null, null, true);
         firstUser = new User(1, "Bill Thomson", "Main Street, Nr. 7", "bill.thomson@gmail.com",
                 "3234565434", List.of(), false);
         firstUserInfo = new UserInfo(1, "Bill Thomson", "Main Street, Nr. 7",
@@ -63,15 +64,7 @@ class UserServiceTest {
         assertThat(saved).isEqualTo(firstUserInfo);
     }
 
-    //    @Test
-//    void findAllBorrowingsOfUser() {
-//        when(userRepository.findById(2)).thenReturn(Optional.of(secondUser));
-//        assertThat(userService.findAllBorrowingsOfUser(2))
-//                .hasSize(2)
-//                .containsExactly(firstBorrowingInfoNoUser, secondBorrowingInfoNoUser);
-//    }
-//
-//
+
     @Test
     void testFindAll_atStart_emptyList() {
         when(userRepository.findAll()).thenReturn(List.of());
@@ -129,5 +122,12 @@ class UserServiceTest {
 
         assertThat(userService.findById(1))
                 .isEqualTo(firstUserInfo);
+    }
+
+    @Test
+    void testFindUser_wrongId_exceptionThrown(){
+        when(userRepository.findById(11)).thenReturn(Optional.empty());
+
+        assertThrows(UserNotFoundException.class, ()->userService.findUser(11));
     }
 }

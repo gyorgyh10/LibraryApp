@@ -11,7 +11,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorCreateUpdateCommand {
-    @NotBlank(message = "Most not be blank")
+
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "Author of the book", example="Emma Writer")
     private String name;
 }

@@ -42,12 +42,11 @@ class BorrowingControllerTest {
 
     private final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
 
-    private ExemplarCreateCommand firstExemplarToSave;
+    private ExemplarCreateUpdateCommand firstExemplarToSave;
     private BorrowingInfo firstBorrowingSaved;
-    private ExemplarCreateCommand secondExemplarToSave;
     private BorrowingInfo secondBorrowingSaved;
     private BorrowingInfo borrowingUpdated;
-    private BookCreateCommand firstBookToSave;
+    private BookCreateUpdateCommand firstBookToSave;
     private AuthorCreateUpdateCommand firstAuthorToSave;
     private UserCreateCommand firstUserToSave;
 
@@ -58,8 +57,6 @@ class BorrowingControllerTest {
         initSecondExemplar();
         initFirstUser();
         initFirstBorrowing();
-
-//        initSecondBorrowing();
     }
 
     @Test
@@ -81,7 +78,6 @@ class BorrowingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString("")))
                 .andExpect(status().isCreated());
-//                .andExpect(content().json(objectMapper.writeValueAsString(firstBorrowingSaved)));
         assertThat(repository.findAll(1, 1))
                 .hasSize(1)
                 .extracting(Borrowing::getId, Borrowing::getFromDate, Borrowing::getToDate, Borrowing::getActive)
@@ -90,128 +86,15 @@ class BorrowingControllerTest {
 
         mockMvc.perform(get("/api/library/borrowings"))
                 .andExpect(status().isOk());
-//                .andExpect(content().json(objectMapper.writeValueAsString(List.of(firstBorrowingSaved))));
 
         mockMvc.perform(get("/api/library/borrowings/1"))
                 .andExpect(status().isOk());
     }
 
-//    @Test
-//    void testSave_twoExemplars_infosReturnedAndAllInTheList() throws Exception {
-//        mockMvc.perform(post("/api/library/authors")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
-//        mockMvc.perform(post("/api/library/books")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstBookToSave)));
-//        mockMvc.perform(post("/api/library/exemplars/1")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(objectMapper.writeValueAsString(firstExemplarToSave)))
-//                .andExpect(status().isCreated())
-//                .andExpect(content().json(objectMapper.writeValueAsString(firstBorrowingSaved)));
-//
-//
-//        mockMvc.perform(post("/api/library/exemplars/1")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(objectMapper.writeValueAsString(secondExemplarToSave)))
-//                .andExpect(status().isCreated())
-//                .andExpect(content().json(objectMapper.writeValueAsString(secondSaved)));
-//
-//
-//        assertThat(repository.findAll())
-//                .hasSize(2)
-//                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
-//                .contains(tuple(firstBorrowingSaved.getId(), firstBorrowingSaved.getInventoryNumber(),
-//                        firstBorrowingSaved.getCondition(), firstBorrowingSaved.getBorrowable()))
-//                .contains(tuple(secondSaved.getId(), secondSaved.getInventoryNumber(),
-//                        secondSaved.getCondition(), secondSaved.getBorrowable()));
-//
-//        assertThat(repository.findById(2).get().getInventoryNumber())
-//                .isEqualTo(212);
-//
-//        mockMvc.perform(get("/api/library/exemplars"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(objectMapper.writeValueAsString(
-//                        List.of(firstBorrowingSaved, secondSaved)))
-//                );
-//
-//        mockMvc.perform(get("/api/library/exemplars/1"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(objectMapper.writeValueAsString(firstBorrowingSaved)));
-//    }
-//
-//    @Test
-//    void testUpdate_exemplar123GOOD_updated_exemplar333USED() throws Exception {
-//        mockMvc.perform(post("/api/library/authors")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
-//        mockMvc.perform(post("/api/library/books")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstBookToSave)));
-//        mockMvc.perform(post("/api/library/exemplars/1")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstExemplarToSave)));
-//
-//        mockMvc.perform(put("/api/library/exemplars/1")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(objectMapper.writeValueAsString(firstToUpdate)))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json(objectMapper.writeValueAsString(firstUpdated)));
-//
-//        assertThat(repository.findAll())
-//                .hasSize(1)
-//                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
-//                .containsExactly(tuple(firstUpdated.getId(), firstUpdated.getInventoryNumber(),
-//                        firstUpdated.getCondition(), firstUpdated.getBorrowable()));
-//    }
-//
-//    @Test
-//    void testUpdate_invalidId_notFoundResponseAndNothingChanged() throws Exception {
-//        mockMvc.perform(post("/api/library/authors")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
-//        mockMvc.perform(post("/api/library/books")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstBookToSave)));
-//        mockMvc.perform(post("/api/library/exemplars/1")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstExemplarToSave)));
-//
-//        mockMvc.perform(put("/api/library/exemplars/2")
-//                        .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                        .content(objectMapper.writeValueAsString(firstToUpdate)))
-//                .andExpect(status().isBadRequest());
-//
-//        assertThat(repository.findAll())
-//                .hasSize(1)
-//                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
-//                .containsExactly(tuple(firstBorrowingSaved.getId(), firstBorrowingSaved.getInventoryNumber(),
-//                        firstBorrowingSaved.getCondition(), firstBorrowingSaved.getBorrowable()));
-//    }
-//
-//    @Test
-//    void testDelete_exemplar123_exemplar123Deleted() throws Exception {
-//        mockMvc.perform(post("/api/library/authors")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
-//        mockMvc.perform(post("/api/library/books")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstBookToSave)));
-//        mockMvc.perform(post("/api/library/exemplars/1")
-//                .contentType(MediaType.APPLICATION_JSON_VALUE)
-//                .content(objectMapper.writeValueAsString(firstExemplarToSave)));
-//        mockMvc.perform(delete("/api/library/exemplars/1"))
-//                .andExpect(status().isOk());
-//
-//        assertThat(repository.findAll()).isEmpty();
-//        mockMvc.perform(delete("/api/library/exemplars/1"))
-//                .andExpect(status().isBadRequest());
-//    }
-
     private void initBook() {
         firstAuthorToSave = new AuthorCreateUpdateCommand();
         firstAuthorToSave.setName("Emma Writer");
-        firstBookToSave = new BookCreateCommand();
+        firstBookToSave = new BookCreateUpdateCommand();
         firstBookToSave.setTitle("Tom's Adventure");
         firstBookToSave.setNumberOfPages(123);
         firstBookToSave.setPublisher("Johnson's");
@@ -223,14 +106,14 @@ class BorrowingControllerTest {
 
 
     private void initFirstExemplar() {
-        firstExemplarToSave = new ExemplarCreateCommand();
+        firstExemplarToSave = new ExemplarCreateUpdateCommand();
         firstExemplarToSave.setInventoryNumber(123);
         firstExemplarToSave.setCondition(Condition.GOOD);
         firstExemplarToSave.setBorrowable(true);
     }
 
     private void initSecondExemplar() {
-        secondExemplarToSave = new ExemplarCreateCommand();
+        ExemplarCreateUpdateCommand secondExemplarToSave = new ExemplarCreateUpdateCommand();
         secondExemplarToSave.setInventoryNumber(212);
         secondExemplarToSave.setCondition(Condition.NEW);
         secondExemplarToSave.setBorrowable(false);
@@ -261,20 +144,4 @@ class BorrowingControllerTest {
         firstBorrowingSaved.setActive(true);
     }
 
-    private int[] transformDate(LocalDate fromDate) {
-        int[] fromD = {fromDate.getYear(), fromDate.getMonthValue(), fromDate.getDayOfMonth()};
-        return fromD;
-    }
-
-//    private void initToUpdate() {
-//        firstToUpdate = new ExemplarCreateCommand();
-//        firstToUpdate.setInventoryNumber(333);
-//        firstToUpdate.setCondition(Condition.USED);
-//        firstToUpdate.setBorrowable(true);
-//        firstUpdated = new ExemplarInfo();
-//        firstUpdated.setId(1);
-//        firstUpdated.setInventoryNumber(333);
-//        firstUpdated.setCondition(Condition.USED);
-//        firstUpdated.setBorrowable(true);
-//    }
 }

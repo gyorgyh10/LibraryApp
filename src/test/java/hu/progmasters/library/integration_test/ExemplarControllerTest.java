@@ -42,13 +42,13 @@ class ExemplarControllerTest {
 
     private final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
 
-    private ExemplarCreateCommand firstToSave;
+    private ExemplarCreateUpdateCommand firstToSave;
     private ExemplarInfo firstSaved;
-    private ExemplarCreateCommand secondToSave;
+    private ExemplarCreateUpdateCommand secondToSave;
     private ExemplarInfo secondSaved;
-    private ExemplarCreateCommand firstToUpdate;
+    private ExemplarCreateUpdateCommand firstToUpdate;
     private ExemplarInfo firstUpdated;
-    private BookCreateCommand firstBookToSave;
+    private BookCreateUpdateCommand firstBookToSave;
     private AuthorCreateUpdateCommand firstAuthorToSave;
 
     @BeforeEach
@@ -199,7 +199,7 @@ class ExemplarControllerTest {
     private void initFirstBook() {
         firstAuthorToSave = new AuthorCreateUpdateCommand();
         firstAuthorToSave.setName("Emma Writer");
-        firstBookToSave = new BookCreateCommand();
+        firstBookToSave = new BookCreateUpdateCommand();
         firstBookToSave.setTitle("Tom's Adventure");
         firstBookToSave.setNumberOfPages(123);
         firstBookToSave.setPublisher("Johnson's");
@@ -211,7 +211,7 @@ class ExemplarControllerTest {
 
 
     private void initFirst() {
-        firstToSave = new ExemplarCreateCommand();
+        firstToSave = new ExemplarCreateUpdateCommand();
         firstToSave.setInventoryNumber(123);
         firstToSave.setCondition(Condition.GOOD);
         firstToSave.setBorrowable(true);
@@ -224,7 +224,7 @@ class ExemplarControllerTest {
     }
 
     private void initSecond() {
-        secondToSave = new ExemplarCreateCommand();
+        secondToSave = new ExemplarCreateUpdateCommand();
         secondToSave.setInventoryNumber(212);
         secondToSave.setCondition(Condition.NEW);
         secondToSave.setBorrowable(false);
@@ -237,7 +237,7 @@ class ExemplarControllerTest {
     }
 
     private void initToUpdate() {
-        firstToUpdate = new ExemplarCreateCommand();
+        firstToUpdate = new ExemplarCreateUpdateCommand();
         firstToUpdate.setInventoryNumber(333);
         firstToUpdate.setCondition(Condition.USED);
         firstToUpdate.setBorrowable(true);

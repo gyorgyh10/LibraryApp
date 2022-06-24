@@ -6,7 +6,7 @@ import hu.progmasters.library.domain.Book;
 import hu.progmasters.library.domain.Genre;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
-import hu.progmasters.library.dto.BookCreateCommand;
+import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,11 +44,11 @@ class BookControllerTest {
 
     private final ObjectMapper objectMapper = JsonMapper.builder().findAndAddModules().build();
 
-    private BookCreateCommand firstToSave;
+    private BookCreateUpdateCommand firstToSave;
     private BookInfo firstSaved;
-    private BookCreateCommand secondToSave;
+    private BookCreateUpdateCommand secondToSave;
     private BookInfo secondSaved;
-    private BookCreateCommand firstToUpdate;
+    private BookCreateUpdateCommand firstToUpdate;
     private BookInfo firstUpdated;
     private AuthorCreateUpdateCommand firstAuthorToSave;
 
@@ -171,7 +171,7 @@ class BookControllerTest {
     }
 
     private void initFirst() {
-        firstToSave = new BookCreateCommand();
+        firstToSave = new BookCreateUpdateCommand();
         firstToSave.setTitle("Tom's Adventure");
         firstToSave.setNumberOfPages(123);
         firstToSave.setPublisher("Johnson's");
@@ -191,7 +191,7 @@ class BookControllerTest {
     }
 
     private void initSecond() {
-        secondToSave = new BookCreateCommand();
+        secondToSave = new BookCreateUpdateCommand();
         secondToSave.setTitle("Tom Connor");
         secondToSave.setNumberOfPages(212);
         secondToSave.setPublisher("The Best");
@@ -211,7 +211,7 @@ class BookControllerTest {
     }
 
     private void initToUpdate() {
-        firstToUpdate = new BookCreateCommand();
+        firstToUpdate = new BookCreateUpdateCommand();
         firstToUpdate.setTitle("Tom's New Adventure");
         firstToUpdate.setNumberOfPages(333);
         firstToUpdate.setPublisher("Johnson's");

@@ -13,7 +13,5 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: on
-  jackson:
-    date-format: yyyy-MM-dd
 #    docker run --name librarydb -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=library -d -p 3388:3306 mysql:latest
 

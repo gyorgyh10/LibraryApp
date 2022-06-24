@@ -27,20 +27,11 @@ public class AuthorService {
         this.modelMapper = modelMapper;
     }
 
-    public AuthorInfo createAuthor(AuthorCreateUpdateCommand command) {
+    public AuthorInfo create(AuthorCreateUpdateCommand command) {
         Author toSave = modelMapper.map(command, Author.class);
         toSave.setDeleted(false);
         Author saved = authorRepository.create(toSave);
         return modelMapper.map(saved, AuthorInfo.class);
-    }
-
-
-    public List<BookInfoNoAuthor> findAllBooksOfAuthor(Integer authorId) {
-        Author author = findAuthor(authorId);
-        List<Book> books = author.getBooks();
-        return books.stream()
-                .map(book -> modelMapper.map(book, BookInfoNoAuthor.class))
-                .collect(Collectors.toList());
     }
 
     public List<AuthorInfo> findAll() {
@@ -50,9 +41,19 @@ public class AuthorService {
                 .collect(Collectors.toList());
     }
 
-    public AuthorRepository getAuthorRepository() {
-        return authorRepository;
+    public AuthorInfo findById(Integer authorId) {
+        Author authorFound = findAuthor(authorId);
+        return modelMapper.map(authorFound, AuthorInfo.class);
     }
+
+    public List<BookInfoNoAuthor> findAllBooksOfAuthor(Integer authorId) {
+        Author author = findAuthor(authorId);
+        List<Book> books = author.getBooks();
+        return books.stream()
+                .map(book -> modelMapper.map(book, BookInfoNoAuthor.class))
+                .collect(Collectors.toList());
+    }
+
 
     public AuthorInfo update(Integer id, AuthorCreateUpdateCommand command) {
         Author toUpdate = findAuthor(id);

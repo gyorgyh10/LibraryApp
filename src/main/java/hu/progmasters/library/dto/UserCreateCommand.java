@@ -14,20 +14,20 @@ import java.util.List;
 @NoArgsConstructor
 public class UserCreateCommand {
 
-    @NotBlank(message = "Most not be blank")
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "The name of the user", example="Tom Jhonson")
     private String name;
 
-    @NotBlank(message = "Most not be blank")
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "The address of the user", example="Principal street, no. 6")
     private String address;
 
-    @NotBlank(message = "Most not be blank")
+    @NotBlank(message = "Must not be blank")
     @Email
     @Schema(description = "The email address of the user", example="tom.jhonson@gmail.com")
     private String email;
 
-    @NotBlank(message = "Most not be blank")
+    @NotBlank(message = "Must not be blank")
     @Schema(description = "The phone number of the user", example="6381218763")
     private String phoneNumber;
 }

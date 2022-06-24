@@ -6,6 +6,7 @@ import hu.progmasters.library.domain.Genre;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
+import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,8 +31,6 @@ class AuthorServiceTest {
 
     @InjectMocks
     AuthorService authorService;
-    private Book firstBook;
-    private Book secondBook;
     private BookInfoNoAuthor firstBookInfoNoAuthor;
     private BookInfoNoAuthor secondBookInfoNoAuthor;
     private Author firstAuthor;
@@ -42,9 +42,9 @@ class AuthorServiceTest {
     @BeforeEach
     void init() {
         authorService = new AuthorService(authorRepository, new ModelMapper());
-        firstBook = new Book(1, "4321344", "The One", secondAuthor, 232,
+        Book firstBook = new Book(1, "4321344", "The One", secondAuthor, 232,
                 "The Best", 1999, Genre.FANTASY_AND_SF, List.of(), false);
-        secondBook = new Book(2, "4321345", "The Second", secondAuthor, 200,
+        Book secondBook = new Book(2, "4321345", "The Second", secondAuthor, 200,
                 "The Best", 2001, Genre.FANTASY_AND_SF, List.of(), false);
         firstBookInfoNoAuthor = new BookInfoNoAuthor(1, "4321344", "The One", 232,
                 "The Best", 1999, Genre.FANTASY_AND_SF);
@@ -57,16 +57,16 @@ class AuthorServiceTest {
     }
 
     @Test
-    void test_createAuthor_newSueGrafton_SueGraftonSaved() {
+    void testCreate_newSueGrafton_SueGraftonSaved() {
         AuthorCreateUpdateCommand command = new AuthorCreateUpdateCommand("Sue Grafton");
         Author firstToSave = new Author(null, "Sue Grafton", null, false);
         when(authorRepository.create(firstToSave)).thenReturn(firstAuthor);
-        AuthorInfo saved = authorService.createAuthor(command);
+        AuthorInfo saved = authorService.create(command);
         assertThat(saved).isEqualTo(firstAuthorInfo);
     }
 
     @Test
-    void findAllBooksOfAuthor() {
+    void testFindAllBooksOfAuthor() {
         when(authorRepository.findById(2)).thenReturn(Optional.of(secondAuthor));
         assertThat(authorService.findAllBooksOfAuthor(2))
                 .hasSize(2)
@@ -90,7 +90,7 @@ class AuthorServiceTest {
     }
 
     @Test
-    void update_updateSueGrafton_updatedToSueGriff() {
+    void testUpdate_updateSueGrafton_updatedToSueGriff() {
         when(authorRepository.findById(1)).thenReturn(Optional.of(firstAuthor));
         AuthorCreateUpdateCommand command = new AuthorCreateUpdateCommand("Sue Griff");
         AuthorInfo updated = new AuthorInfo(1, "Sue Griff");
@@ -99,5 +99,18 @@ class AuthorServiceTest {
                 .isEqualTo(updated);
     }
 
+    @Test
+    void testFindAuthor_wrongId_exceptionThrown(){
+        when(authorRepository.findById(11)).thenReturn(Optional.empty());
 
+        assertThrows(AuthorNotFoundException.class, ()->authorService.findAuthor(11));
+    }
+
+    @Test
+    void testFindById_existingAuthor_authorReturned() {
+        when(authorRepository.findById(1)).thenReturn(Optional.of(firstAuthor));
+
+        assertThat(authorService.findById(1))
+                .isEqualTo(firstAuthorInfo);
+    }
 }

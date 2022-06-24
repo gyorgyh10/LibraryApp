@@ -3,7 +3,7 @@ package hu.progmasters.library.service;
 import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.Exemplar;
 import hu.progmasters.library.domain.User;
-import hu.progmasters.library.dto.BorrowingCreateCommand;
+import hu.progmasters.library.dto.BorrowingUpdateCommand;
 import hu.progmasters.library.dto.BorrowingInfo;
 import hu.progmasters.library.exceptionhandling.BorrowingNotFoundException;
 import hu.progmasters.library.exceptionhandling.BorrowingTimeHasExpiredException;
@@ -63,14 +63,6 @@ public class BorrowingService {
     }
 
 
-    public BorrowingInfo findById(Integer id) {
-        Optional<Borrowing> optionalBorrowing = borrowingRepository.findById(id);
-        if (optionalBorrowing.isEmpty()) {
-            throw new BorrowingNotFoundException(id);
-        }
-        return modelMapper.map(optionalBorrowing.get(), BorrowingInfo.class);
-    }
-
     public List<BorrowingInfo> findAll(Integer exemplarId, Integer userId) {
         List<Borrowing> borrowings = borrowingRepository.findAll(exemplarId, userId);
         return borrowings.stream()
@@ -78,13 +70,18 @@ public class BorrowingService {
                 .collect(Collectors.toList());
     }
 
-    public void delete(Integer id) {
-        Borrowing toDelete = findBorrowing(id);
-        borrowingRepository.delete(toDelete);
-
+    public BorrowingInfo findById(Integer id) {
+        Borrowing borrowingFound = findBorrowing(id);
+        return modelMapper.map(borrowingFound, BorrowingInfo.class);
     }
 
-    public BorrowingInfo update(Integer id, BorrowingCreateCommand command) {
+    public void delete(Integer id) {
+        Borrowing toDelete = findBorrowing(id);
+        toDelete.getExemplar().setBorrowable(true);
+        borrowingRepository.delete(toDelete);
+    }
+
+    public BorrowingInfo update(Integer id, BorrowingUpdateCommand command) {
         Borrowing toUpdate = findBorrowing(id);
         modelMapper.map(command, toUpdate);
         return modelMapper.map(toUpdate, BorrowingInfo.class);
@@ -108,7 +105,7 @@ public class BorrowingService {
         return modelMapper.map(forInactivation, BorrowingInfo.class);
     }
 
-    private Borrowing findBorrowing(Integer id) {
+    public Borrowing findBorrowing(Integer id) {
         Optional<Borrowing> optionalBorrowing = borrowingRepository.findById(id);
         if (optionalBorrowing.isEmpty()) {
             throw new BorrowingNotFoundException(id);
