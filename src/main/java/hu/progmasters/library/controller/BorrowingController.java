@@ -55,7 +55,7 @@ public class BorrowingController {
         return new ResponseEntity<>(borrowing, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{/borrowingId}")
+    @DeleteMapping("/{borrowingId}")
     @Operation(summary = "Deletes a borrowing")
     @ApiResponse(responseCode = "200", description = "Borrowing has been deleted.")
     public ResponseEntity<Void> delete(@PathVariable("borrowingId") Integer id) {

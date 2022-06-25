@@ -59,7 +59,7 @@ class AuthorControllerTest {
     }
 
     @Test
-    void testSave_TomWriter_savedInfoReturnedAndTomWriterInTheList() throws Exception {
+    void testCreate_TomWriter_savedInfoReturnedAndTomWriterInTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstToSave)))
@@ -77,7 +77,7 @@ class AuthorControllerTest {
     }
 
     @Test
-    void testSave_threeAuthors_infosReturnedAndAllInTheList() throws Exception {
+    void testCreate_threeAuthors_infosReturnedAndAllInTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstToSave)))
@@ -146,6 +146,21 @@ class AuthorControllerTest {
                 .extracting(Author::getId, Author::getName)
                 .containsExactly(tuple(firstSaved.getId(), firstSaved.getName()));
     }
+
+    @Test
+    void testDelete_TomWriter_TomWriterDeleted() throws Exception {
+        mockMvc.perform(post("/api/library/authors")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstToSave)));
+
+        mockMvc.perform(delete("/api/library/authors/1"))
+                .andExpect(status().isOk());
+
+        assertThat(repository.findAll()).isEmpty();
+        mockMvc.perform(delete("/api/library/authors/1"))
+                .andExpect(status().isBadRequest());
+    }
+
 
     private void initFirst() {
         firstToSave = new AuthorCreateUpdateCommand();

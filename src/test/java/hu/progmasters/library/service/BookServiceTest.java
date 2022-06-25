@@ -1,12 +1,12 @@
 package hu.progmasters.library.service;
 
-import hu.progmasters.library.domain.Author;
-import hu.progmasters.library.domain.Book;
-import hu.progmasters.library.domain.Genre;
+import hu.progmasters.library.domain.*;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
+import hu.progmasters.library.exceptionhandling.BookHasExemplarsException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
+import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -119,6 +120,25 @@ class BookServiceTest {
 
         assertThat(bookService.update(1, command))
                 .isEqualTo(updated);
+    }
+
+    @Test
+    void testDelete_existingBookNoExemplar_setDeletedTrue() {
+        when(bookRepository.findById(1)).thenReturn(Optional.of(firstBook));
+
+        bookService.delete(1);
+        assertTrue(firstBook.getDeleted());
+    }
+
+    @Test
+    void testDelete_BookWithExemplar_notDeletedAndExceptionThrown() {
+        Book bookWithExemplar = new Book(2, "4321345", "The Second", firstAuthor, 200,
+                "The Best", 2001, Genre.FANTASY_AND_SF,
+                List.of(new Exemplar(1, 234, Condition.GOOD, true, null,
+                        null, false)), false);
+        when(bookRepository.findById(2)).thenReturn(Optional.of(bookWithExemplar));
+
+        assertThrows(BookHasExemplarsException.class, () -> bookService.delete(2));
     }
 
 }

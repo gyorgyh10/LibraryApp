@@ -22,8 +22,7 @@ import java.time.LocalDate;
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -60,7 +59,7 @@ class BorrowingControllerTest {
     }
 
     @Test
-    void testSave_exemplar123_savedInfoReturnedAndExemplar123InTheList() throws Exception {
+    void testCreate_exemplar123_savedInfoReturnedAndExemplar123InTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstAuthorToSave)));
@@ -89,6 +88,61 @@ class BorrowingControllerTest {
 
         mockMvc.perform(get("/api/library/borrowings/1"))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDelete_borrowingExists_borrowingDeleted() throws Exception {
+        mockMvc.perform(post("/api/library/authors")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
+        mockMvc.perform(post("/api/library/books")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstBookToSave)));
+        mockMvc.perform(post("/api/library/exemplars/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstExemplarToSave)));
+        mockMvc.perform(post("/api/library/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstUserToSave)));
+        mockMvc.perform(post("/api/library/borrowings/1/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString("")));
+
+        mockMvc.perform(delete("/api/library/borrowings/1"))
+                .andExpect(status().isOk());
+
+        assertThat(repository.findAll(null, null)).isEmpty();
+        mockMvc.perform(delete("/api/library/borrowings/1"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void testProlongation_borrowingNotExpired_borrowingExtended() throws Exception {
+        mockMvc.perform(post("/api/library/authors")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
+        mockMvc.perform(post("/api/library/books")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstBookToSave)));
+        mockMvc.perform(post("/api/library/exemplars/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstExemplarToSave)));
+        mockMvc.perform(post("/api/library/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstUserToSave)));
+        mockMvc.perform(post("/api/library/borrowings/1/1")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString("")));
+
+        mockMvc.perform(put("/api/library/borrowings/extend/1"))
+                .andExpect(status().isOk());
+
+        assertThat(repository.findAll(1, 1))
+                .hasSize(1)
+                .extracting(Borrowing::getId, Borrowing::getFromDate, Borrowing::getToDate, Borrowing::getActive)
+                .containsExactly(tuple(firstBorrowingSaved.getId(), firstBorrowingSaved.getFromDate(),
+                        firstBorrowingSaved.getToDate().plusDays(10), firstBorrowingSaved.getActive()));
+
     }
 
     private void initBook() {

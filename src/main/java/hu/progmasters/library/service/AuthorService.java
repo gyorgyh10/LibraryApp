@@ -2,10 +2,14 @@ package hu.progmasters.library.service;
 
 import hu.progmasters.library.domain.Author;
 import hu.progmasters.library.domain.Book;
+import hu.progmasters.library.domain.Borrowing;
+import hu.progmasters.library.domain.User;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
+import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
+import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -48,7 +52,10 @@ public class AuthorService {
 
     public List<BookInfoNoAuthor> findAllBooksOfAuthor(Integer authorId) {
         Author author = findAuthor(authorId);
-        List<Book> books = author.getBooks();
+        List<Book> books = author.getBooks()
+                .stream()
+                .filter(book -> !book.getDeleted())
+                .collect(Collectors.toList());
         return books.stream()
                 .map(book -> modelMapper.map(book, BookInfoNoAuthor.class))
                 .collect(Collectors.toList());
@@ -64,9 +71,22 @@ public class AuthorService {
 
     public Author findAuthor(Integer authorId) {
         Optional<Author> authorOptional = authorRepository.findById(authorId);
-        if (authorOptional.isEmpty()) {
+        if (authorOptional.isEmpty() || authorOptional.get().getDeleted()) {
             throw new AuthorNotFoundException(authorId);
         }
         return authorOptional.get();
+    }
+
+    public void delete(Integer id) {
+        Author authorToDelete = findAuthor(id);
+        List<Book> books = authorToDelete.getBooks()
+                .stream()
+                .filter(book -> !book.getDeleted())
+                .collect(Collectors.toList());
+        if (books.isEmpty()) {
+            authorToDelete.setDeleted(true);
+        } else {
+            throw new AuthorHasBooksException(id);
+        }
     }
 }

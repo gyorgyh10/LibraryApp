@@ -60,7 +60,7 @@ class ExemplarControllerTest {
     }
 
     @Test
-    void testSave_exemplar123_savedInfoReturnedAndExemplar123InTheList() throws Exception {
+    void testCreate_exemplar123_savedInfoReturnedAndExemplar123InTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstAuthorToSave)));
@@ -75,7 +75,8 @@ class ExemplarControllerTest {
 
         assertThat(repository.findAll())
                 .hasSize(1)
-                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
+                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition,
+                        Exemplar::getBorrowable)
                 .containsExactly(tuple(firstSaved.getId(), firstSaved.getInventoryNumber(),
                         firstSaved.getCondition(), firstSaved.getBorrowable()));
 
@@ -85,7 +86,7 @@ class ExemplarControllerTest {
     }
 
     @Test
-    void testSave_twoExemplars_infosReturnedAndAllInTheList() throws Exception {
+    void testCreate_twoExemplars_infosReturnedAndAllInTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstAuthorToSave)));
@@ -108,7 +109,8 @@ class ExemplarControllerTest {
 
         assertThat(repository.findAll())
                 .hasSize(2)
-                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
+                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition,
+                        Exemplar::getBorrowable)
                 .contains(tuple(firstSaved.getId(), firstSaved.getInventoryNumber(),
                         firstSaved.getCondition(), firstSaved.getBorrowable()))
                 .contains(tuple(secondSaved.getId(), secondSaved.getInventoryNumber(),
@@ -148,7 +150,8 @@ class ExemplarControllerTest {
 
         assertThat(repository.findAll())
                 .hasSize(1)
-                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
+                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition,
+                        Exemplar::getBorrowable)
                 .containsExactly(tuple(firstUpdated.getId(), firstUpdated.getInventoryNumber(),
                         firstUpdated.getCondition(), firstUpdated.getBorrowable()));
     }
@@ -172,7 +175,8 @@ class ExemplarControllerTest {
 
         assertThat(repository.findAll())
                 .hasSize(1)
-                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition, Exemplar::getBorrowable)
+                .extracting(Exemplar::getId, Exemplar::getInventoryNumber, Exemplar::getCondition,
+                        Exemplar::getBorrowable)
                 .containsExactly(tuple(firstSaved.getId(), firstSaved.getInventoryNumber(),
                         firstSaved.getCondition(), firstSaved.getBorrowable()));
     }

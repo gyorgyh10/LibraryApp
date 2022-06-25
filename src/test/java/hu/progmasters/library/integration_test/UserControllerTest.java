@@ -56,7 +56,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testSave_TomJohnson_savedInfoReturnedAndTomJohnsonInTheList() throws Exception {
+    void testCreate_TomJohnson_savedInfoReturnedAndTomJohnsonInTheList() throws Exception {
         mockMvc.perform(post("/api/library/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(firstToSave)))
@@ -75,7 +75,7 @@ class UserControllerTest {
     }
 
     @Test
-    void testSave_twoUsers_infosReturnedAndAllInTheList() throws Exception {
+    void testCreate_twoUsers_infosReturnedAndAllInTheList() throws Exception {
         mockMvc.perform(post("/api/library/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(firstToSave)))

@@ -4,6 +4,8 @@ import hu.progmasters.library.domain.*;
 import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.dto.ExemplarInfo;
+import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
+import hu.progmasters.library.exceptionhandling.BookHasExemplarsException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
 import hu.progmasters.library.repository.BookRepository;
 import org.modelmapper.ModelMapper;
@@ -53,7 +55,10 @@ public class BookService {
 
     public List<ExemplarInfo> findAllExemplarsOfBook(Integer bookId) {
         Book ofBook = findBook(bookId);
-        List<Exemplar> exemplars = ofBook.getExemplars();
+        List<Exemplar> exemplars = ofBook.getExemplars()
+                .stream()
+                .filter(exemplar -> !exemplar.getDeleted())
+                .collect(Collectors.toList());
         return exemplars.stream()
                 .map(exemplar -> modelMapper.map(exemplar, ExemplarInfo.class))
                 .collect(Collectors.toList());
@@ -67,9 +72,22 @@ public class BookService {
 
     public Book findBook(Integer bookId) {
         Optional<Book> bookOptional = bookRepository.findById(bookId);
-        if (bookOptional.isEmpty()) {
+        if (bookOptional.isEmpty() || bookOptional.get().getDeleted()) {
             throw new BookNotFoundException(bookId);
         }
         return bookOptional.get();
+    }
+
+    public void delete(Integer id) {
+        Book bookToDelete = findBook(id);
+        List<Exemplar> exemplars = bookToDelete.getExemplars()
+                .stream()
+                .filter(exemplar -> !exemplar.getDeleted())
+                .collect(Collectors.toList());
+        if (exemplars.isEmpty()) {
+            bookToDelete.setDeleted(true);
+        } else {
+            throw new BookHasExemplarsException(id);
+        }
     }
 }

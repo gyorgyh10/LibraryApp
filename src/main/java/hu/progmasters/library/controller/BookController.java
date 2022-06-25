@@ -71,4 +71,13 @@ public class BookController {
         BookInfo updated = bookService.update(id, command);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{bookId}")
+    @Operation(summary = "Deletes a book")
+    @ApiResponse(responseCode = "200", description = "Book has been deleted.")
+    public ResponseEntity<Void> delete(@PathVariable("bookId") Integer id) {
+        log.info("Http request, DELETE /api/library/books/{bookId} with variable: " + id);
+        bookService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

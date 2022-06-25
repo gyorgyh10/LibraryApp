@@ -6,7 +6,9 @@ import hu.progmasters.library.domain.Genre;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
+import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
+import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,5 +115,20 @@ class AuthorServiceTest {
 
         assertThat(authorService.findById(1))
                 .isEqualTo(firstAuthorInfo);
+    }
+
+    @Test
+    void testDelete_existingAuthorWithNoBooks_setDeletedTrue() {
+        when(authorRepository.findById(1)).thenReturn(Optional.of(firstAuthor));
+
+        authorService.delete(1);
+        assertTrue(firstAuthor.getDeleted());
+    }
+
+    @Test
+    void testDelete_AuthorWithABooks_notDeletedAndExceptionThrown() {
+        when(authorRepository.findById(2)).thenReturn(Optional.of(secondAuthor));
+
+        assertThrows(AuthorHasBooksException.class, () -> authorService.delete(2));
     }
 }

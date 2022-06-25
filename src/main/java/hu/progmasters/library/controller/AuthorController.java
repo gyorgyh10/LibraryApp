@@ -63,4 +63,13 @@ public class AuthorController {
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{authorId}")
+    @Operation(summary = "Deletes a author")
+    @ApiResponse(responseCode = "200", description = "Author has been deleted.")
+    public ResponseEntity<Void> delete(@PathVariable("authorId") Integer id) {
+        log.info("Http request, DELETE /api/library/authors/{authorId} with variable: " + id);
+        authorService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

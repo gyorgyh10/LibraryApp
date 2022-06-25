@@ -95,4 +95,18 @@ public class GlobalExceptionHandler {
                         " has expired. No prolongation is possible!");
         return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AuthorHasBooksException.class)
+    public ResponseEntity<List<ValidationError>> handleAuthorHasBooks(AuthorHasBooksException exception) {
+        ValidationError validationError = new ValidationError("authorId",
+                "Author with id: " + exception.getAuthorId() + " has books. Can't be deleted!");
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BookHasExemplarsException.class)
+    public ResponseEntity<List<ValidationError>> handleBookHasExemplars(BookHasExemplarsException exception) {
+        ValidationError validationError = new ValidationError("bookId",
+                "Book with id: " + exception.getBookId() + " has exemplars. Can't be deleted!");
+        return new ResponseEntity<>(List.of(validationError), HttpStatus.BAD_REQUEST);
+    }
 }

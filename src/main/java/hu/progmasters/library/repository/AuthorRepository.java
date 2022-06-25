@@ -24,6 +24,7 @@ public class AuthorRepository {
     }
 
     public List<Author> findAll() {
-        return entityManager.createQuery("SELECT a FROM Author a", Author.class).getResultList();
+        return entityManager.createQuery("SELECT a FROM Author a " +
+                "WHERE a.deleted = false", Author.class).getResultList();
     }
 }

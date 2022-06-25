@@ -61,7 +61,7 @@ class BookControllerTest {
     }
 
     @Test
-    void testSave_TomsAdventure_savedInfoReturnedAndTomsAdventureInTheList() throws Exception {
+    void testCreate_TomsAdventure_savedInfoReturnedAndTomsAdventureInTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstAuthorToSave)));
@@ -83,7 +83,7 @@ class BookControllerTest {
     }
 
     @Test
-    void testSave_twoBooks_infosReturnedAndAllInTheList() throws Exception {
+    void testCreate_twoBooks_infosReturnedAndAllInTheList() throws Exception {
         mockMvc.perform(post("/api/library/authors")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(objectMapper.writeValueAsString(firstAuthorToSave)));
@@ -162,6 +162,24 @@ class BookControllerTest {
                 .extracting(Book::getId, Book::getTitle, Book::getNumberOfPages, Book::getPublisher, Book::getISBN)
                 .containsExactly(tuple(firstSaved.getId(), firstSaved.getTitle(), firstSaved.getNumberOfPages(),
                         firstSaved.getPublisher(), firstSaved.getISBN()));
+    }
+
+    @Test
+    void testDelete_tomsAdventure_tomsAdventureDeleted() throws Exception {
+        mockMvc.perform(post("/api/library/authors")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstAuthorToSave)));
+        mockMvc.perform(post("/api/library/books")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(objectMapper.writeValueAsString(firstToSave)));
+
+
+        mockMvc.perform(delete("/api/library/books/1"))
+                .andExpect(status().isOk());
+
+        assertThat(repository.findAll(null)).isEmpty();
+        mockMvc.perform(delete("/api/library/books/1"))
+                .andExpect(status().isBadRequest());
     }
 
 
