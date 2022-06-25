@@ -25,6 +25,6 @@ public class Author {
     @OneToMany(mappedBy = "author")
     private List<Book> books;
 
-    @Column(name="author_deleted")
+    @Column(name = "author_deleted")
     private Boolean deleted;
 }

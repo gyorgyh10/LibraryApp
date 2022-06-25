@@ -1,6 +1,8 @@
 package hu.progmasters.library.controller;
 
-import hu.progmasters.library.dto.*;
+import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
+import hu.progmasters.library.dto.AuthorInfo;
+import hu.progmasters.library.dto.BookInfoNoAuthor;
 import hu.progmasters.library.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -56,7 +58,7 @@ public class AuthorController {
     @Operation(summary = "Update an author")
     @ApiResponse(responseCode = "200", description = "Author has been updated")
     public ResponseEntity<AuthorInfo> update(@PathVariable("authorId") Integer id,
-                                           @Valid @RequestBody AuthorCreateUpdateCommand command) {
+                                             @Valid @RequestBody AuthorCreateUpdateCommand command) {
         log.info("Http request, PUT /api/library/authors/{authorId} body: " + command.toString() +
                 " with variable: " + id);
         AuthorInfo updated = authorService.update(id, command);

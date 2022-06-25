@@ -1,13 +1,10 @@
 package hu.progmasters.library.dto;
 
 
-import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
 import java.time.LocalDate;
 
 @Data

@@ -1,7 +1,9 @@
 package hu.progmasters.library.controller;
 
 import hu.progmasters.library.domain.Genre;
-import hu.progmasters.library.dto.*;
+import hu.progmasters.library.dto.BookCreateUpdateCommand;
+import hu.progmasters.library.dto.BookInfo;
+import hu.progmasters.library.dto.ExemplarInfo;
 import hu.progmasters.library.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +39,7 @@ public class BookController {
     @GetMapping
     @Operation(summary = "List all books OR all books from a genre")
     @ApiResponse(responseCode = "200", description = "Books have been listed.")
-    public ResponseEntity<List<BookInfo>> findAll(@RequestParam(value="genre", required = false) Genre genre) {
+    public ResponseEntity<List<BookInfo>> findAll(@RequestParam(value = "genre", required = false) Genre genre) {
         log.info("Http request, GET /api/library/books with parameter genre: " + genre);
         List<BookInfo> books = bookService.findAll(genre);
         return new ResponseEntity<>(books, HttpStatus.OK);

@@ -34,6 +34,6 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Borrowing> borrowings;
 
-    @Column(name="user_deleted")
+    @Column(name = "user_deleted")
     private Boolean deleted;
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -15,19 +14,19 @@ import java.util.List;
 public class UserCreateCommand {
 
     @NotBlank(message = "Must not be blank")
-    @Schema(description = "The name of the user", example="Tom Jhonson")
+    @Schema(description = "The name of the user", example = "Tom Jhonson")
     private String name;
 
     @NotBlank(message = "Must not be blank")
-    @Schema(description = "The address of the user", example="Principal street, no. 6")
+    @Schema(description = "The address of the user", example = "Principal street, no. 6")
     private String address;
 
     @NotBlank(message = "Must not be blank")
     @Email
-    @Schema(description = "The email address of the user", example="tom.jhonson@gmail.com")
+    @Schema(description = "The email address of the user", example = "tom.jhonson@gmail.com")
     private String email;
 
     @NotBlank(message = "Must not be blank")
-    @Schema(description = "The phone number of the user", example="6381218763")
+    @Schema(description = "The phone number of the user", example = "6381218763")
     private String phoneNumber;
 }

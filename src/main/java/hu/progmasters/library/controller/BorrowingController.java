@@ -29,7 +29,7 @@ public class BorrowingController {
     public ResponseEntity<BorrowingInfo> create(@PathVariable("exemplarId") Integer exemplarId,
                                                 @PathVariable("userId") Integer userId) {
         log.info("Http request, POST /api/library/borrowings/{exemplarId}/{userId}, variables: " +
-                exemplarId +", "+ userId);
+                exemplarId + ", " + userId);
         BorrowingInfo saved = borrowingService.create(exemplarId, userId);
         return new ResponseEntity<>(saved, HttpStatus.CREATED);
     }
@@ -40,7 +40,7 @@ public class BorrowingController {
     public ResponseEntity<List<BorrowingInfo>> findAll(
             @RequestParam(value = "exemplarId", required = false) Integer exemplarId,
             @RequestParam(value = "userId", required = false) Integer userId) {
-        log.info("Http request, GET /api/library/borrowings with parameters exemplarId: "+ exemplarId +
+        log.info("Http request, GET /api/library/borrowings with parameters exemplarId: " + exemplarId +
                 " userId: " + userId);
         List<BorrowingInfo> borrowings = borrowingService.findAll(exemplarId, userId);
         return new ResponseEntity<>(borrowings, HttpStatus.OK);

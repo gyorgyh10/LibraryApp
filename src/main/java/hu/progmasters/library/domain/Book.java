@@ -45,7 +45,7 @@ public class Book {
     @OneToMany(mappedBy = "ofBook")
     private List<Exemplar> exemplars;
 
-    @Column(name="book_deleted")
+    @Column(name = "book_deleted")
     private Boolean deleted;
 }
 

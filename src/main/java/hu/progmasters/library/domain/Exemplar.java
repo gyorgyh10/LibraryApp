@@ -36,6 +36,6 @@ public class Exemplar {
     @OneToMany(mappedBy = "exemplar")
     private List<Borrowing> borrowings;
 
-    @Column(name="exemplar_deleted")
+    @Column(name = "exemplar_deleted")
     private Boolean deleted;
 }

@@ -14,14 +14,14 @@ import javax.validation.constraints.NotNull;
 public class ExemplarCreateUpdateCommand {
 
     @NotNull(message = "Most not be Null")
-    @Schema(description = "The inventory number of the exemplar", example="3241")
+    @Schema(description = "The inventory number of the exemplar", example = "3241")
     private Integer inventoryNumber;
 
     @NotNull(message = "Most not be Null")
-    @Schema(description = "The condition the book is in", example="NEW")
+    @Schema(description = "The condition the book is in", example = "NEW")
     private Condition condition;
 
     @NotNull(message = "Most not be Null")
-    @Schema(description = "Is this exemplar borrowable?", example="true")
+    @Schema(description = "Is this exemplar borrowable?", example = "true")
     private Boolean borrowable;
 }

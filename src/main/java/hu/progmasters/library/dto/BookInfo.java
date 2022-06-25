@@ -1,14 +1,9 @@
 package hu.progmasters.library.dto;
 
-import hu.progmasters.library.domain.Author;
-import hu.progmasters.library.domain.Exemplar;
 import hu.progmasters.library.domain.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

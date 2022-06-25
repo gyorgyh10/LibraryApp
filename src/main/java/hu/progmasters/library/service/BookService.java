@@ -1,10 +1,12 @@
 package hu.progmasters.library.service;
 
-import hu.progmasters.library.domain.*;
+import hu.progmasters.library.domain.Author;
+import hu.progmasters.library.domain.Book;
+import hu.progmasters.library.domain.Exemplar;
+import hu.progmasters.library.domain.Genre;
 import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.dto.ExemplarInfo;
-import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
 import hu.progmasters.library.exceptionhandling.BookHasExemplarsException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
 import hu.progmasters.library.repository.BookRepository;

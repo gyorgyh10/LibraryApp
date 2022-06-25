@@ -1,13 +1,12 @@
 package hu.progmasters.library.repository;
 
 import hu.progmasters.library.domain.Exemplar;
-import hu.progmasters.library.domain.User;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ExemplarRepository {
@@ -21,9 +20,9 @@ public class ExemplarRepository {
         return toSave;
     }
 
-   public List<Exemplar> findAllBorrowableExemplarOfBook(Integer bookId) {
+    public List<Exemplar> findAllBorrowableExemplarOfBook(Integer bookId) {
         return entityManager.createQuery("SELECT e FROM Exemplar e " +
-                                "WHERE (e.ofBook.id= :bookIdParam) AND e.borrowable=true", Exemplar.class)
+                        "WHERE (e.ofBook.id= :bookIdParam) AND e.borrowable=true", Exemplar.class)
                 .setParameter("bookIdParam", bookId)
                 .getResultList();
     }

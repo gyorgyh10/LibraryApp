@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BookRepository {
@@ -22,9 +23,9 @@ public class BookRepository {
 
     public List<Book> findAll(Genre genre) {
         return entityManager.createQuery(
-                "SELECT b FROM Book b " +
-                        "WHERE (:genreParam IS NULL OR b.genre= :genreParam) " +
-                        "AND b.deleted = false", Book.class)
+                        "SELECT b FROM Book b " +
+                                "WHERE (:genreParam IS NULL OR b.genre= :genreParam) " +
+                                "AND b.deleted = false", Book.class)
                 .setParameter("genreParam", genre)
                 .getResultList();
     }

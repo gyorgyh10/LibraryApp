@@ -39,7 +39,7 @@ public class BorrowingRepository {
 
     public List<Borrowing> activeBorrowingsOfUser(Integer userId) {
         return entityManager.createQuery("SELECT b FROM Borrowing B " +
-                "WHERE (b.user.id= :idParam) AND b.active", Borrowing.class)
+                        "WHERE (b.user.id= :idParam) AND b.active", Borrowing.class)
                 .setParameter("idParam", userId)
                 .getResultList();
     }

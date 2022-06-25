@@ -2,14 +2,11 @@ package hu.progmasters.library.service;
 
 import hu.progmasters.library.domain.Author;
 import hu.progmasters.library.domain.Book;
-import hu.progmasters.library.domain.Borrowing;
-import hu.progmasters.library.domain.User;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
 import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
-import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

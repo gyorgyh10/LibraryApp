@@ -1,12 +1,12 @@
 package hu.progmasters.library.repository;
 
 import hu.progmasters.library.domain.Author;
-import hu.progmasters.library.domain.Book;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class AuthorRepository {
