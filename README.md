@@ -60,5 +60,6 @@ This is an application, that helps to register the borrowings of a library.
 * Delete a borrowing by id: (DELETE) /api/library/borrowings/{borrowingId}
 * Extend a borrowing by id: (PUT) /api/library/borrowings/extend/{borrowingId}
 * Inactivate a borrowing - book is back: (PUT) /api/library/borrowings/bring_back/{borrowingId}
+* List all overdue borrowings: (GET) /api/library/borrowings/overdue
 
 

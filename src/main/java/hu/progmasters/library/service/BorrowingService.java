@@ -70,6 +70,13 @@ public class BorrowingService {
                 .collect(Collectors.toList());
     }
 
+    public List<BorrowingInfo> findAllOverdueBorrowings() {
+        List<Borrowing> overdueBorrowings = borrowingRepository.findAllOverdueBorrowings();
+        return overdueBorrowings.stream()
+                .map(borrowing -> modelMapper.map(borrowing, BorrowingInfo.class))
+                .collect(Collectors.toList());
+    }
+
     public BorrowingInfo findById(Integer id) {
         Borrowing borrowingFound = findBorrowing(id);
         return modelMapper.map(borrowingFound, BorrowingInfo.class);
@@ -122,4 +129,5 @@ public class BorrowingService {
     public void setProlongation(long prolongation) {
         this.prolongation = prolongation;
     }
+
 }

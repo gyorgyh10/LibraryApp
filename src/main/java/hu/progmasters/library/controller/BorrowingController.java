@@ -46,6 +46,15 @@ public class BorrowingController {
         return new ResponseEntity<>(borrowings, HttpStatus.OK);
     }
 
+    @GetMapping("/overdue")
+    @Operation(summary = "List all overdue borrowings")
+    @ApiResponse(responseCode = "200", description = "Overdue borrowings have been listed")
+    public ResponseEntity<List<BorrowingInfo>> findAllOverdueBorrowings() {
+        log.info("Http request, GET /api/library/borrowings/overdue");
+        List<BorrowingInfo> borrowings = borrowingService.findAllOverdueBorrowings();
+        return new ResponseEntity<>(borrowings, HttpStatus.OK);
+    }
+
     @GetMapping("/{borrowingId}")
     @Operation(summary = "Find a borrowing by id")
     @ApiResponse(responseCode = "200", description = "Borrowing has been found")

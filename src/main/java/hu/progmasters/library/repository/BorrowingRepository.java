@@ -37,11 +37,9 @@ public class BorrowingRepository {
         entityManager.remove(toDelete);
     }
 
-    public List<Borrowing> activeBorrowingsOfUser(Integer userId) {
-        return entityManager.createQuery("SELECT b FROM Borrowing B " +
-                        "WHERE (b.user.id= :idParam) AND b.active", Borrowing.class)
-                .setParameter("idParam", userId)
+    public List<Borrowing> findAllOverdueBorrowings() {
+        return entityManager.createQuery("SELECT b FROM Borrowing b " +
+                        "WHERE b.toDate < CURRENT_DATE AND b.active = true", Borrowing.class)
                 .getResultList();
     }
-
 }
