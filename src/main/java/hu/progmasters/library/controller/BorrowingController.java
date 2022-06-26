@@ -36,7 +36,7 @@ public class BorrowingController {
 
     @GetMapping()
     @Operation(summary = "List all borrowings OR all for an exemplar or for a user")
-    @ApiResponse(responseCode = "200", description = "Borrowings have been listed.")
+    @ApiResponse(responseCode = "200", description = "Borrowings have been listed")
     public ResponseEntity<List<BorrowingInfo>> findAll(
             @RequestParam(value = "exemplarId", required = false) Integer exemplarId,
             @RequestParam(value = "userId", required = false) Integer userId) {
@@ -47,8 +47,8 @@ public class BorrowingController {
     }
 
     @GetMapping("/{borrowingId}")
-    @Operation(summary = "Finds a borrowing by id")
-    @ApiResponse(responseCode = "200", description = "Borrowing has been found.")
+    @Operation(summary = "Find a borrowing by id")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been found")
     public ResponseEntity<BorrowingInfo> findById(@PathVariable("borrowingId") Integer id) {
         log.info("Http request, GET /api/library/borrowings/{borrowingId} with variable: " + id);
         BorrowingInfo borrowing = borrowingService.findById(id);
@@ -56,8 +56,8 @@ public class BorrowingController {
     }
 
     @DeleteMapping("/{borrowingId}")
-    @Operation(summary = "Deletes a borrowing")
-    @ApiResponse(responseCode = "200", description = "Borrowing has been deleted.")
+    @Operation(summary = "Delete a borrowing")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been deleted")
     public ResponseEntity<Void> delete(@PathVariable("borrowingId") Integer id) {
         log.info("Http request, DELETE /api/library/borrowings{/borrowingId} with variable: " + id);
         borrowingService.delete(id);
@@ -65,8 +65,8 @@ public class BorrowingController {
     }
 
     @PutMapping("/extend/{borrowingId}")
-    @Operation(summary = "Extends a borrowing")
-    @ApiResponse(responseCode = "200", description = "Borrowing has been extended.")
+    @Operation(summary = "Extend a borrowing")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been extended")
     public ResponseEntity<BorrowingInfo> prolongation(@PathVariable("borrowingId") Integer id) {
         log.info("Http request, PUT /api/library/borrowings/extend/{borrowingId} with variable: " + id);
         BorrowingInfo extended = borrowingService.prolongation(id);
@@ -75,7 +75,7 @@ public class BorrowingController {
 
     @PutMapping("/bring_back/{borrowingId}")
     @Operation(summary = "Inactivate a borrowing. (Book is back.)")
-    @ApiResponse(responseCode = "200", description = "Borrowing has been inactivated.")
+    @ApiResponse(responseCode = "200", description = "Borrowing has been inactivated")
     public ResponseEntity<BorrowingInfo> inactivation(@PathVariable("borrowingId") Integer id) {
         log.info("Http request, PUT /api/library/borrowings/bring_back/{borrowingId} with variable " + id);
         BorrowingInfo inactivated = borrowingService.inactivation(id);

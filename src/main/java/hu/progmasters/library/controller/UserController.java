@@ -36,7 +36,7 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "List all users")
-    @ApiResponse(responseCode = "200", description = "Users have been listed.")
+    @ApiResponse(responseCode = "200", description = "Users have been listed")
     public ResponseEntity<List<UserInfo>> findAll() {
         log.info("Http request, GET /api/library/users");
         List<UserInfo> users = userService.findAll();
@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @Operation(summary = "Finds a user by id")
-    @ApiResponse(responseCode = "200", description = "User has been found.")
+    @Operation(summary = "Find a user by id")
+    @ApiResponse(responseCode = "200", description = "User has been found")
     public ResponseEntity<UserInfo> findById(@PathVariable("userId") Integer id) {
         log.info("Http request, GET /api/library/users/{userId} with variable: " + id);
         UserInfo user = userService.findById(id);
@@ -54,7 +54,7 @@ public class UserController {
 
     @GetMapping("/{userId}/borrowings")
     @Operation(summary = "List all borrowings of a user")
-    @ApiResponse(responseCode = "200", description = "Borrowings have been listed.")
+    @ApiResponse(responseCode = "200", description = "Borrowings have been listed")
     public ResponseEntity<List<BorrowingInfoNoUser>> findAllBorrowings(@PathVariable("userId") Integer id) {
         log.info("Http request, GET /api/library/users/{userId}/borrowings with variable: " + id);
         List<BorrowingInfoNoUser> borrowings = userService.findAllBorrowings(id);
@@ -73,8 +73,8 @@ public class UserController {
     }
 
     @DeleteMapping("/{userId}")
-    @Operation(summary = "Deletes a user")
-    @ApiResponse(responseCode = "200", description = "User has been deleted.")
+    @Operation(summary = "Delete a user")
+    @ApiResponse(responseCode = "200", description = "User has been deleted")
     public ResponseEntity<Void> delete(@PathVariable("userId") Integer id) {
         log.info("Http request, DELETE /api/library/users/{userId} with variable: " + id);
         userService.delete(id);

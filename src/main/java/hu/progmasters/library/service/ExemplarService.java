@@ -6,7 +6,6 @@ import hu.progmasters.library.domain.Exemplar;
 import hu.progmasters.library.dto.ExemplarCreateUpdateCommand;
 import hu.progmasters.library.dto.ExemplarInfo;
 import hu.progmasters.library.dto.ExemplarInfoAll;
-import hu.progmasters.library.dto.ExemplarInfoNoBook;
 import hu.progmasters.library.exceptionhandling.ExemplarIsInActiveBorrowingException;
 import hu.progmasters.library.exceptionhandling.ExemplarNotFoundException;
 import hu.progmasters.library.repository.ExemplarRepository;
@@ -53,12 +52,6 @@ public class ExemplarService {
         return modelMapper.map(exemplarFound, ExemplarInfoAll.class);
     }
 
-    public List<ExemplarInfoNoBook> findAllBorrowableExemplarsOfBook(Integer bookId) {
-        List<Exemplar> borrowableExemplars = exemplarRepository.findAllBorrowableExemplarOfBook(bookId);
-        return borrowableExemplars.stream()
-                .map(exemplar -> modelMapper.map(exemplar, ExemplarInfoNoBook.class))
-                .collect(Collectors.toList());
-    }
 
     public void delete(Integer exemplarId) {
         Exemplar toDelete = findExemplar(exemplarId);

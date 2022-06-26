@@ -47,7 +47,7 @@ public class BookController {
 
     @GetMapping("/{bookId}")
     @Operation(summary = "Finds a book by id")
-    @ApiResponse(responseCode = "200", description = "Book has been found.")
+    @ApiResponse(responseCode = "200", description = "Book has been found")
     public ResponseEntity<BookInfo> findById(@PathVariable("bookId") Integer id) {
         log.info("Http request, GET /api/library/books/{bookId} with variable: " + id);
         BookInfo book = bookService.findById(id);
@@ -56,7 +56,7 @@ public class BookController {
 
     @GetMapping("/{bookId}/exemplars")
     @Operation(summary = "List all EXEMPLARS of a book")
-    @ApiResponse(responseCode = "200", description = "Exemplars have been listed.")
+    @ApiResponse(responseCode = "200", description = "Exemplars have been listed")
     public ResponseEntity<List<ExemplarInfo>> findAllExemplars(@PathVariable("bookId") Integer id) {
         log.info("Http request, GET /api/library/books/{bookId}/exemplars with variable: " + id);
         List<ExemplarInfo> exemplars = bookService.findAllExemplarsOfBook(id);
@@ -75,8 +75,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{bookId}")
-    @Operation(summary = "Deletes a book")
-    @ApiResponse(responseCode = "200", description = "Book has been deleted.")
+    @Operation(summary = "Delete a book")
+    @ApiResponse(responseCode = "200", description = "Book has been deleted")
     public ResponseEntity<Void> delete(@PathVariable("bookId") Integer id) {
         log.info("Http request, DELETE /api/library/books/{bookId} with variable: " + id);
         bookService.delete(id);

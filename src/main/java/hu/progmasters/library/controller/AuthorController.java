@@ -3,6 +3,7 @@ package hu.progmasters.library.controller;
 import hu.progmasters.library.dto.AuthorCreateUpdateCommand;
 import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
+import hu.progmasters.library.dto.UserInfo;
 import hu.progmasters.library.service.AuthorService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,8 +38,8 @@ public class AuthorController {
 
 
     @GetMapping
-    @Operation(summary = "List all authors.")
-    @ApiResponse(responseCode = "200", description = "Authors have been listed.")
+    @Operation(summary = "List all authors")
+    @ApiResponse(responseCode = "200", description = "Authors have been listed")
     public ResponseEntity<List<AuthorInfo>> findAll() {
         log.info("Http request, GET /api/library/authors");
         List<AuthorInfo> authors = authorService.findAll();
@@ -46,10 +47,19 @@ public class AuthorController {
     }
 
     @GetMapping("/{authorId}")
-    @Operation(summary = "List all books of the author.")
-    @ApiResponse(responseCode = "200", description = "Books of the author have been listed.")
-    public ResponseEntity<List<BookInfoNoAuthor>> findAllBooksOfAuthor(@PathVariable("authorId") Integer id) {
+    @Operation(summary = "Find an author by id")
+    @ApiResponse(responseCode = "200", description = "Author has been found")
+    public ResponseEntity<AuthorInfo> findById(@PathVariable("authorId") Integer id) {
         log.info("Http request, GET /api/library/authors/{authorId} with variable: " + id);
+        AuthorInfo author = authorService.findById(id);
+        return new ResponseEntity<>(author, HttpStatus.OK);
+    }
+
+    @GetMapping("/booksOf/{authorId}")
+    @Operation(summary = "List all books of the author")
+    @ApiResponse(responseCode = "200", description = "Books of the author have been listed")
+    public ResponseEntity<List<BookInfoNoAuthor>> findAllBooksOfAuthor(@PathVariable("authorId") Integer id) {
+        log.info("Http request, GET /api/library/authors/booksOf/{authorId} with variable: " + id);
         List<BookInfoNoAuthor> books = authorService.findAllBooksOfAuthor(id);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
@@ -66,8 +76,8 @@ public class AuthorController {
     }
 
     @DeleteMapping("/{authorId}")
-    @Operation(summary = "Deletes a author")
-    @ApiResponse(responseCode = "200", description = "Author has been deleted.")
+    @Operation(summary = "Delete an author")
+    @ApiResponse(responseCode = "200", description = "Author has been deleted")
     public ResponseEntity<Void> delete(@PathVariable("authorId") Integer id) {
         log.info("Http request, DELETE /api/library/authors/{authorId} with variable: " + id);
         authorService.delete(id);

@@ -131,4 +131,5 @@ class AuthorServiceTest {
 
         assertThrows(AuthorHasBooksException.class, () -> authorService.delete(2));
     }
+
 }

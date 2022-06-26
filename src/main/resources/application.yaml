@@ -3,7 +3,8 @@ borrowing:
   prolongation: 10
 spring:
   datasource:
-    url: jdbc:mysql://127.0.0.1:3388/library?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+#    url: jdbc:mysql://127.0.0.1:3388/library?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
+    url: jdbc:mysql://librarydb/library?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&autoReconnect=true
     username: root
     password: 1234
   jpa:
@@ -14,4 +15,5 @@ spring:
         dialect: org.hibernate.dialect.MySQL8Dialect
     show-sql: on
 #    docker run --name librarydb -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=library -d -p 3388:3306 mysql:latest
+#  docker run --name librarydb --network librarynetwork -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=library -d -p 3388:3306 mysql:latest
 

@@ -22,7 +22,8 @@ public class ExemplarRepository {
 
     public List<Exemplar> findAllBorrowableExemplarOfBook(Integer bookId) {
         return entityManager.createQuery("SELECT e FROM Exemplar e " +
-                        "WHERE (e.ofBook.id= :bookIdParam) AND e.borrowable=true", Exemplar.class)
+                        "WHERE (e.ofBook.id= :bookIdParam) AND e.borrowable=true AND e.deleted = false",
+                        Exemplar.class)
                 .setParameter("bookIdParam", bookId)
                 .getResultList();
     }

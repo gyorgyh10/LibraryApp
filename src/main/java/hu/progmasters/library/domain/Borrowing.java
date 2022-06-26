@@ -29,11 +29,9 @@ public class Borrowing {
     private User user;
 
     @Column(name = "borrowing_from_date")
-    //   @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate fromDate;
 
     @Column(name = "borrowing_to_date")
-    //   @JsonFormat(pattern="dd-MM-yyyy")
     private LocalDate toDate;
 
     @Column(name = "borrowing_active")

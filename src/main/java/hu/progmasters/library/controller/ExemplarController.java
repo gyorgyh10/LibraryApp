@@ -27,7 +27,7 @@ public class ExemplarController {
     }
 
     @PostMapping("/{bookId}")
-    @Operation(summary = "Save an exemplar of the book.")
+    @Operation(summary = "Save an exemplar of the book")
     @ApiResponse(responseCode = "201", description = "Exemplar has been saved")
     public ResponseEntity<ExemplarInfo> create(@Valid @RequestBody ExemplarCreateUpdateCommand command,
                                                @PathVariable("bookId") Integer bookId) {
@@ -39,7 +39,7 @@ public class ExemplarController {
 
     @GetMapping
     @Operation(summary = "List all exemplars")
-    @ApiResponse(responseCode = "200", description = "Exemplars have been listed.")
+    @ApiResponse(responseCode = "200", description = "Exemplars have been listed")
     public ResponseEntity<List<ExemplarInfo>> findAll() {
         log.info("Http request, GET /api/library/exemplars");
         List<ExemplarInfo> exemplars = exemplarService.findAll();
@@ -47,7 +47,7 @@ public class ExemplarController {
     }
 
     @GetMapping("/{exemplarId}")
-    @Operation(summary = "Finds an exemplar by id")
+    @Operation(summary = "Find an exemplar by id")
     @ApiResponse(responseCode = "200", description = "Exemplar has been found.")
     public ResponseEntity<ExemplarInfoAll> findById(@PathVariable("exemplarId") Integer id) {
         log.info("Http request, GET /api/library/exemplars/{exemplarId} with variable: " + id);
@@ -56,18 +56,9 @@ public class ExemplarController {
     }
 
 
-//    @GetMapping("/ofbook/{bookId}/borrowable")
-//    @Operation(summary = "List all borrowable exemplars of the book.")
-//    @ApiResponse(responseCode = "200", description = "Borrowable exemplars have been listed.")
-//    public ResponseEntity<List<ExemplarInfoNoBook>> findAllBorrowableExemplarsOfBook(@PathVariable("bookId") Integer bookId) {
-//        log.info("Http request, GET /api/library/exemplars/ofbook/{bookId}/borrowable with variable: " + bookId);
-//        List<ExemplarInfoNoBook> borrowableExemplars = exemplarService.findAllBorrowableExemplarsOfBook(bookId);
-//        return new ResponseEntity<>(borrowableExemplars, HttpStatus.OK);
-//    }
-
     @DeleteMapping("/{exemplarId}")
     @Operation(summary = "Delete the exemplar.")
-    @ApiResponse(responseCode = "200", description = "Exemplar has been deleted.")
+    @ApiResponse(responseCode = "200", description = "Exemplar has been deleted")
     public ResponseEntity<Void> delete(@PathVariable("exemplarId") Integer exemplarId) {
         log.info("Http request, DELETE /api/library/exemplars/{exemplarId} with variable: " + exemplarId);
         exemplarService.delete(exemplarId);

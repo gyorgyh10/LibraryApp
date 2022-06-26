@@ -103,6 +103,8 @@ class AuthorControllerTest {
                 .contains(tuple(secondSaved.getId(), secondSaved.getName()))
                 .contains(tuple(thirdSaved.getId(), thirdSaved.getName()));
 
+        assertThat(repository.findById(2).get().getName())
+                .isEqualTo("John Writer");
 
 
         mockMvc.perform(get("/api/library/authors"))
