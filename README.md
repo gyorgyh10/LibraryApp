@@ -63,3 +63,13 @@ This is an application, that helps to register the borrowings of a library.
 * List all overdue borrowings: (GET) /api/library/borrowings/overdue
 
 
+## Running the application
+
+###### Create the docker network:
+    docker network create librarynetwork
+
+###### Create and start the db docker container:
+    docker run --name librarydb --network librarynetwork -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=library -d -p 3388:3306 mysql:latest
+
+###### Create and start the app docker container:
+    docker run --name libraryapp --network librarynetwork -p 8080:8080 -d libraryapp
