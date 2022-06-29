@@ -8,7 +8,6 @@ import hu.progmasters.library.dto.AuthorInfo;
 import hu.progmasters.library.dto.BookInfoNoAuthor;
 import hu.progmasters.library.exceptionhandling.AuthorHasBooksException;
 import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
-import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.AuthorRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,10 +102,10 @@ class AuthorServiceTest {
     }
 
     @Test
-    void testFindAuthor_wrongId_exceptionThrown(){
+    void testFindAuthor_wrongId_exceptionThrown() {
         when(authorRepository.findById(11)).thenReturn(Optional.empty());
 
-        assertThrows(AuthorNotFoundException.class, ()->authorService.findAuthor(11));
+        assertThrows(AuthorNotFoundException.class, () -> authorService.findAuthor(11));
     }
 
     @Test

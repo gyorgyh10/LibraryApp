@@ -4,11 +4,16 @@ This is an application, that helps to register the borrowings of a library.
 
 ##Entities used
 
-* Author 
-* Book
-* Exemplar
-* User
-* Borrowing
+* Author (Integer id, String name, List<Book> book, Boolean deleted)
+* Book   (Integer id, String ISBN, String title, Author author, int numberOfPages, String publisher, int publishingYear, Genre genre, List<Exemplar> exemplars, Boolean deleted)
+* Exemplar (Integer id,  Integer inventoryNumber, Condition condition, Boolean borrowable, Book ofBook, List<Borrowing> borrowings, Boolean deleted)
+* User (Integer id, String name, String address, String email, String phoneNumber, List<Borrowing> borrowings, Boolean deleted)
+* Borrowing (Integer id, Exemplar exemplar, User user, LocalDate fromDate, LocalDate toDate, Boolean active)
+
+Enums:
+
+-- Genre (ROMANCE, THRILLER, FANTASY_AND_SF, CHILDREN, INSPIRATIONAL)    
+-- Condition (NEW, GOOD, USED, ANCIENT)
 
 
 ## API endpoints

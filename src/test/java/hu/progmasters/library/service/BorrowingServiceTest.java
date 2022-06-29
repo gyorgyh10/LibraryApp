@@ -4,13 +4,13 @@ import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.Condition;
 import hu.progmasters.library.domain.Exemplar;
 import hu.progmasters.library.domain.User;
-import hu.progmasters.library.dto.*;
+import hu.progmasters.library.dto.BorrowingInfo;
+import hu.progmasters.library.dto.BorrowingUpdateCommand;
+import hu.progmasters.library.dto.ExemplarInfoNoBorrowings;
+import hu.progmasters.library.dto.UserInfo;
 import hu.progmasters.library.exceptionhandling.BorrowingNotFoundException;
 import hu.progmasters.library.exceptionhandling.BorrowingTimeHasExpiredException;
-import hu.progmasters.library.exceptionhandling.UserNotFoundException;
 import hu.progmasters.library.repository.BorrowingRepository;
-import hu.progmasters.library.repository.ExemplarRepository;
-import hu.progmasters.library.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,7 +25,6 @@ import java.util.Optional;
 
 import static java.time.LocalDate.now;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -53,7 +52,6 @@ class BorrowingServiceTest {
     private Borrowing secondBorrowing;
     private BorrowingInfo firstBorrowingInfo;
     private BorrowingInfo secondBorrowingInfo;
-
 
 
     @BeforeEach
@@ -92,7 +90,7 @@ class BorrowingServiceTest {
         when(borrowingRepository.create(borrowingToSave)).thenReturn(firstBorrowing);
         ExemplarInfoNoBorrowings firstExemplarInfoSaved = new ExemplarInfoNoBorrowings(1, 123,
                 Condition.GOOD, false, null);
-        BorrowingInfo firstBorrowingInfoSaved= new BorrowingInfo(1, firstExemplarInfoSaved, firstUserInfo,
+        BorrowingInfo firstBorrowingInfoSaved = new BorrowingInfo(1, firstExemplarInfoSaved, firstUserInfo,
                 now(), now().plusDays(20), true);
         BorrowingInfo actual = borrowingService.create(1, 1);
         assertThat(actual)
@@ -162,7 +160,7 @@ class BorrowingServiceTest {
                 LocalDate.of(2022, 6, 20), true);
         when(borrowingRepository.findById(3)).thenReturn(Optional.of(forProlongation));
 
-        assertThrows(BorrowingTimeHasExpiredException.class, ()->borrowingService.prolongation(3));
+        assertThrows(BorrowingTimeHasExpiredException.class, () -> borrowingService.prolongation(3));
     }
 
     @Test
@@ -192,9 +190,9 @@ class BorrowingServiceTest {
     }
 
     @Test
-    void testFindBorrowing_wrongId_exceptionThrown(){
+    void testFindBorrowing_wrongId_exceptionThrown() {
         when(borrowingRepository.findById(11)).thenReturn(Optional.empty());
 
-        assertThrows(BorrowingNotFoundException.class, ()->borrowingService.findBorrowing(11));
+        assertThrows(BorrowingNotFoundException.class, () -> borrowingService.findBorrowing(11));
     }
 }

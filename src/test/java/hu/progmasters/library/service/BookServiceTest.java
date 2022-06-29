@@ -6,7 +6,6 @@ import hu.progmasters.library.dto.BookCreateUpdateCommand;
 import hu.progmasters.library.dto.BookInfo;
 import hu.progmasters.library.exceptionhandling.BookHasExemplarsException;
 import hu.progmasters.library.exceptionhandling.BookNotFoundException;
-import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.repository.BookRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -104,17 +103,17 @@ class BookServiceTest {
     }
 
     @Test
-    void testFindBook_wrongId_exceptionThrown(){
+    void testFindBook_wrongId_exceptionThrown() {
         when(bookRepository.findById(11)).thenReturn(Optional.empty());
 
-        assertThrows(BookNotFoundException.class, ()->bookService.findBook(11));
+        assertThrows(BookNotFoundException.class, () -> bookService.findBook(11));
     }
 
     @Test
     void testUpdate_updateTheOne_updatedToTheOnlyOne() {
         when(bookRepository.findById(1)).thenReturn(Optional.of(firstBook));
         BookCreateUpdateCommand command = new BookCreateUpdateCommand("4321344", "The Only One", 1,
-                200,"The Best", 2000, Genre.FANTASY_AND_SF);
+                200, "The Best", 2000, Genre.FANTASY_AND_SF);
         BookInfo updated = new BookInfo(1, "4321344", "The Only One", firstAuthorInfo, 200,
                 "The Best", 2000, Genre.FANTASY_AND_SF);
 

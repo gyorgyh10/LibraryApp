@@ -4,7 +4,6 @@ import hu.progmasters.library.domain.Borrowing;
 import hu.progmasters.library.domain.User;
 import hu.progmasters.library.dto.UserCreateCommand;
 import hu.progmasters.library.dto.UserInfo;
-import hu.progmasters.library.exceptionhandling.AuthorNotFoundException;
 import hu.progmasters.library.exceptionhandling.UserHasActiveBorrowingsException;
 import hu.progmasters.library.exceptionhandling.UserNotFoundException;
 import hu.progmasters.library.repository.UserRepository;
@@ -125,9 +124,9 @@ class UserServiceTest {
     }
 
     @Test
-    void testFindUser_wrongId_exceptionThrown(){
+    void testFindUser_wrongId_exceptionThrown() {
         when(userRepository.findById(11)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, ()->userService.findUser(11));
+        assertThrows(UserNotFoundException.class, () -> userService.findUser(11));
     }
 }

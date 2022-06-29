@@ -37,7 +37,6 @@ public class BookCreateUpdateCommand {
     private String publisher;
 
     @Min(1700)
-    @Max(2022)
     @Schema(description = "The publishing year of the book", example = "2021")
     private int publishingYear;
 
