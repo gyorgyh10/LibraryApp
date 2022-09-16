@@ -49,13 +49,12 @@ public class BorrowingService {
         User userOfBorrowing = userService.findUser(userId);
         exemplarOfBorrowing.setBorrowable(false);
         Borrowing toSave = new Borrowing();
-        LocalDate now = now();
-        toSave.setFromDate(now);
-        System.out.println(borrowingTime);
-        LocalDate toDate = now.plusDays(borrowingTime);
-        toSave.setToDate(toDate);
         toSave.setExemplar(exemplarOfBorrowing);
         toSave.setUser(userOfBorrowing);
+        LocalDate now = now();
+        toSave.setFromDate(now);
+        LocalDate toDate = now.plusDays(borrowingTime);
+        toSave.setToDate(toDate);
         toSave.setActive(true);
         Borrowing saved = borrowingRepository.create(toSave);
 

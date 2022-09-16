@@ -139,14 +139,13 @@ class BorrowingServiceTest {
 
     @Test
     void testProlongation_prolongationPossible_prolongationMade() {
+        LocalDate now = now();
         Borrowing forProlongation = new Borrowing(3, firstExemplar, firstUser,
-                LocalDate.of(2022, 6, 24),
-                LocalDate.of(2022, 7, 10), true);
+                now, now.plusDays(20),true);
         when(borrowingRepository.findById(3)).thenReturn(Optional.of(forProlongation));
 
         BorrowingInfo prolongated = new BorrowingInfo(3, firstExemplarInfo, firstUserInfo,
-                LocalDate.of(2022, 6, 24),
-                LocalDate.of(2022, 7, 20), true);
+                now, now.plusDays(30),true);
 
         assertThat(borrowingService.prolongation(3))
                 .isEqualTo(prolongated);
